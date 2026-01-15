@@ -1,0 +1,126 @@
+[90m= [39m[34;4mIlluminate\Database\Eloquent\Collection[39;24m {#7699
+    [34mall[39m: [
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7532
+        [34mid[39m: [35m1[39m,
+        [34mname[39m: "[32mViewAny:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7533
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m1[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7534
+        [34mid[39m: [35m2[39m,
+        [34mname[39m: "[32mView:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7545
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m2[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7671
+        [34mid[39m: [35m3[39m,
+        [34mname[39m: "[32mCreate:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7546
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m3[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7668
+        [34mid[39m: [35m4[39m,
+        [34mname[39m: "[32mUpdate:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7548
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m4[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7666
+        [34mid[39m: [35m5[39m,
+        [34mname[39m: "[32mDelete:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7547
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m5[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7662
+        [34mid[39m: [35m6[39m,
+        [34mname[39m: "[32mRestore:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7549
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m6[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7664
+        [34mid[39m: [35m7[39m,
+        [34mname[39m: "[32mForceDelete:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7550
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m7[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7669
+        [34mid[39m: [35m8[39m,
+        [34mname[39m: "[32mForceDeleteAny:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7551
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m8[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7661
+        [34mid[39m: [35m9[39m,
+        [34mname[39m: "[32mRestoreAny:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7552
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m9[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7663
+        [34mid[39m: [35m10[39m,
+        [34mname[39m: "[32mReplicate:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7553
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m10[39m,
+        },
+      },
+      [34;4mSpatie\Permission\Models\Permission[39;24m {#7660
+        [34mid[39m: [35m11[39m,
+        [34mname[39m: "[32mReorder:Role[39m",
+        [34mguard_name[39m: "[32mweb[39m",
+        [34mcreated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mupdated_at[39m: "[32m2026-01-07 03:14:07[39m",
+        [34mpivot[39m: [34;4mIlluminate\Database\Eloquent\Relations\Pivot[39;24m {#7554
+          [34mrole_id[39m: [35m1[39m,
+          [34mpermission_id[39m: [35m11[39m,
+        },
+      },
+    ],
+  }
+
