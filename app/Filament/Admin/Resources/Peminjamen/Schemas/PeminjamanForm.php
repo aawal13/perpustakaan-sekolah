@@ -15,34 +15,25 @@ class PeminjamanForm
     {
         return $schema
             ->components([
+                Select::make('siswa_id')
+                    ->relationship('siswa', 'name')
+                    ->searchable()
+                    ->required()
+                    ->preload(),
+
                 Select::make('buku_id')
                     ->relationship('buku', 'judul')
                     ->searchable()
                     ->required()
                     ->preload(),
 
-                Select::make('siswa_id')
-                    ->relationship('siswa', 'name')
-                    ->searchable()
-                    ->required()
-                    ->preload(),
                 DatePicker::make('tanggal_dipinjam')
                     ->default(now())
                     ->native(false)
                     ->required(),
+                    
                 DatePicker::make('tanggal_dikembalikan')
                     ->native(false),
-                // ToggleButtons::make('status')
-                //     ->options(StatusPeminjaman::class)
-                //     ->colors(
-                //         collect(StatusPeminjaman::cases())
-                //             ->mapWithKeys(fn ($case) => [
-                //                 $case->value => $case->color(),
-                //             ])
-                //     )
-                //     ->inline()
-                //     ->default(StatusPeminjaman::DIPINJAM->value)
-                //     ->required(),
             ]);
     }
 }

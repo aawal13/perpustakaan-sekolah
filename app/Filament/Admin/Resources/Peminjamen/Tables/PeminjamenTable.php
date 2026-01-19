@@ -33,24 +33,16 @@ class PeminjamenTable
                 TextColumn::make('tanggal_dipinjam')
                     ->date()
                     ->sortable(),
+                TextColumn::make('batas_peminjaman')
+                    ->date()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('tanggal_dikembalikan')
                     ->date()
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()
-                    ->label('Status')
-                    ->formatStateUsing(
-                        fn (StatusPeminjaman|string $state) =>
-                            $state instanceof StatusPeminjaman
-                                ? $state->label()
-                                : ucfirst($state)
-                    )
-                    ->color(fn ($state) => match ($state instanceof StatusPeminjaman ? $state->value : $state) {
-                        StatusPeminjaman::DIPINJAM->value => 'warning',
-                        StatusPeminjaman::DIKEMBALIKAN->value => 'success',
-                        StatusPeminjaman::TERLAMBAT->value => 'danger',
-                        default => 'gray',
-    }),
+                    ->label('Status'),
                 TextColumn::make('denda')
                     ->money('ID',true)
                     ->numeric()
@@ -93,4 +85,3 @@ class PeminjamenTable
             ]);
     }
 }
-

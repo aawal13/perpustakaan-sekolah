@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Bukus\Schemas;
 
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
@@ -24,6 +25,7 @@ class BukuForm
                     ->preload()
                     ->searchable(),
                 TextInput::make('stok')
+                    ->required()
                     ->numeric(),
             ]);
     }

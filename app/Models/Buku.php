@@ -12,9 +12,8 @@ class Buku extends Model
         'pengarang',
         'penerbit',
         'tahun_terbit',
-        'genre',
-        'stok',
         'kategori_id',
+        'stok'
     ];
 
     public function kategori()

@@ -2,8 +2,8 @@
 
 namespace App\Filament\Admin\Resources\Peminjamen\Schemas;
 
-use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Filament\Infolists\Components\TextEntry;
 
 class PeminjamanInfolist
 {

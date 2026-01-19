@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use App\Models\Setting;
 use App\Enums\StatusPeminjaman;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Setting;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Peminjaman extends Model
 {
@@ -15,8 +17,6 @@ class Peminjaman extends Model
         'siswa_id',
         'tanggal_dipinjam',
         'tanggal_dikembalikan',
-        'status',
-        'denda',
     ];
 
     protected $casts = [
@@ -100,5 +100,21 @@ class Peminjaman extends Model
     public function siswa()
     {
         return $this->belongsTo(Siswa::class);
+    }
+
+    public function batasPeminjaman(): Attribute
+    {
+         return Attribute::make(
+        get: function () {
+            if (! $this->tanggal_dipinjam) {
+                return null;
+            }
+
+            $maksHariPinjam = (int) Setting::get('maks_hari_pinjam', 0);
+
+            return Carbon::parse($this->tanggal_dipinjam)
+                ->addDays($maksHariPinjam);
+        }
+    );
     }
 }
