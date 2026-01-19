@@ -31,14 +31,6 @@ class PeminjamanForm
                     ->default(now())
                     ->native(false)
                     ->required(),
-
-                DatePicker::make('tanggal_dikembalikan')
-                    ->native(false)
-                    ->minDate(fn (callable $get) => $get('tanggal_dipinjam'))
-                    ->afterOrEqual('tanggal_dipinjam')
-                    ->validationMessages([
-                        'after_or_equal' => 'Tanggal kembali tidak boleh lebih kecil dari tanggal dipinjam.',
-                       ]),
             ]);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Filament\Admin\Resources\Peminjamen\Tables;
 
 use Filament\Tables\Table;
 use App\Enums\StatusPeminjaman;
-use Dom\Text;
+use App\Models\Setting;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
@@ -13,10 +13,8 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Support\Facades\Date;
 
 class PeminjamenTable
 {
@@ -62,20 +60,35 @@ class PeminjamenTable
             ->recordActions([
                 ActionGroup::make([
                 ViewAction::make()
-                ->label('Detail'),
+                    ->label('Detail'),
                 EditAction::make(),
-                Action::make('Kembalikan buku')
-                ->color('success')
-                ->icon(Heroicon::BookOpen)
-                ->schema([
-                    DatePicker::make('tanggal_dikembalikan')
-                    ->default(now())
-                    ->displayFormat('d M, Y')
-                    ->native(false),
-                    TextInput::make('maks_hari_pinjam')
-                    ->disabled()
+                Action::make('kembalikan_buku')
+                    ->label('Kembalikan buku')
+                    ->color('success')
+                    ->icon(Heroicon::BookOpen)
+                    ->visible(fn ($record) => $record->status === StatusPeminjaman::DIPINJAM || $record->status === StatusPeminjaman::TERLAMBAT)
+                    ->schema([
+                        DatePicker::make('tanggal_dikembalikan')
+                            ->default(now())
+                            ->native(false)
+                            ->minDate(fn ($record) => $record->tanggal_dipinjam)
+                            ->required(),
 
-                ])
+                        TextInput::make('maks_hari_pinjam')
+                            ->disabled()
+                            ->default(fn () => Setting::get('maks_hari_pinjam')),
+            ])
+            ->action(function (array $data, $record) {
+
+                $record->update([
+                    'tanggal_dikembalikan' => $data['tanggal_dikembalikan'],
+                    'status' => StatusPeminjaman::DIKEMBALIKAN,
+                ]);
+
+                $record->refreshStatusDanDenda();
+            })
+            ->successNotificationTitle('Buku berhasil dikembalikan')
+
                 ])
             ])
             ->toolbarActions([
