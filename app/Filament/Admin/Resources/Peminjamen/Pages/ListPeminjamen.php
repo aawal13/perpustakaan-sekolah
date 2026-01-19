@@ -28,7 +28,33 @@ class ListPeminjamen extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+            ->label('Buat peminjaman'),
         ];
     }
+    
+    public function getTabs(): array
+{
+        return [
+        'Semua' => Tab::make(),
+
+        'Dipinjam' => Tab::make()
+            ->badge(fn () => Peminjaman::where('status', StatusPeminjaman::DIPINJAM)->count())
+            ->modifyQueryUsing(fn (Builder $query) =>
+                $query->where('status', StatusPeminjaman::DIPINJAM)
+            ),
+
+        'Dikembalikan' => Tab::make()
+            ->badge(fn () => Peminjaman::where('status', StatusPeminjaman::DIKEMBALIKAN)->count())
+            ->modifyQueryUsing(fn (Builder $query) =>
+                $query->where('status', StatusPeminjaman::DIKEMBALIKAN)
+            ),
+
+        'Terlambat' => Tab::make()
+            ->badge(fn () => Peminjaman::where('status', StatusPeminjaman::TERLAMBAT)->count())
+            ->modifyQueryUsing(fn (Builder $query) =>
+                $query->where('status', StatusPeminjaman::TERLAMBAT)
+            ),
+    ];
+}
 }
