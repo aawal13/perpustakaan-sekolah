@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Resources\Peminjamen\Tables;
 
 use App\Models\Setting;
-use App\Models\Peminjaman;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
 use App\Enums\StatusPeminjaman;
@@ -12,7 +11,6 @@ use Filament\Actions\ViewAction;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Support\Icons\Heroicon;
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -78,18 +76,27 @@ class PeminjamenTable
                 Action::make('kembalikan_buku')
                     ->label('Kembalikan buku')
                     ->color('success')
-                    ->icon(Heroicon::BookOpen)
+                    ->icon(Heroicon::ArrowLeftEndOnRectangle)
                     ->visible(fn ($record) => $record->status === StatusPeminjaman::DIPINJAM || $record->status === StatusPeminjaman::TERLAMBAT)
                     ->schema([
+                        TextInput::make('batas_peminjaman')
+                            ->label('Batas Peminjaman')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->default(function ($record) {
+                                if (! $record->batas_peminjaman) {
+                                    return '-';
+                                }
+
+                                return $record->batas_peminjaman->format('d M Y');
+                            }),
+
                         DatePicker::make('tanggal_dikembalikan')
                             ->default(now())
                             ->native(false)
                             ->minDate(fn ($record) => $record->tanggal_dipinjam)
                             ->required(),
 
-                        TextInput::make('maks_hari_pinjam')
-                            ->disabled()
-                            ->default(fn () => Setting::get('maks_hari_pinjam')),
             ])
             ->action(function (array $data, $record) {
 
