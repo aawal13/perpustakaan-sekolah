@@ -2,7 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Kategoris\Tables;
 
-use Filament\Actions\BulkActionGroup;
+use App\Models\Kategori;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -14,8 +14,15 @@ class KategorisTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('bukus_count', 'desc')
+            ->query(
+                Kategori::query()->withCount('bukus')
+            )
             ->columns([
                 TextColumn::make('kategori_buku')->searchable(),
+                TextColumn::make('bukus_count')
+                ->label('Total Buku')
+                ->sortable()
             ])
             ->filters([
                 //
