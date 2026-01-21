@@ -35,6 +35,7 @@ class Siswa extends Page implements HasActions, HasSchemas, HasTable
             ModelsSiswa::query()
             ->withCount('peminjaman')
             ->withSum('peminjaman','denda'))
+            ->defaultSort('peminjaman_count','desc')
               ->columns([
                 TextColumn::make('nis')
                 ->label('NIS'),
@@ -43,7 +44,8 @@ class Siswa extends Page implements HasActions, HasSchemas, HasTable
                 TextColumn::make('kelas')
                 ->label('Kelas'),
                 TextColumn::make('peminjaman_count')
-                ->label('Jumlah Peminjaman'),
+                ->label('Jumlah Peminjaman')
+                ->sortable(),
                 TextColumn::make('peminjaman_sum_denda')
                 ->label('Total Denda')
                 ->money('IDR',true)
