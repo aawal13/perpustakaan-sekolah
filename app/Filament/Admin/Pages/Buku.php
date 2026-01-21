@@ -35,11 +35,13 @@ class Buku extends Page implements HasActions, HasSchemas, HasTable
           return $table
              ->query(
               ModelsBuku::query()->withCount('peminjaman'))
-                ->columns([
-                  TextColumn::make('judul'),
-                  TextColumn::make('kategori.kategori_buku'),
-                  TextColumn::make('peminjaman_count')
-                  ->label('Jumlah Peminjaman'),
+              ->defaultSort('peminjaman_count','desc')
+              ->columns([
+                TextColumn::make('judul'),
+                TextColumn::make('kategori.kategori_buku'),
+                TextColumn::make('peminjaman_count')
+                  ->label('Jumlah Peminjaman')
+                  ->sortable(),
                 ])
               ->filters([
                   // ..
