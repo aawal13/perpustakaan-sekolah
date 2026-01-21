@@ -25,10 +25,12 @@ class PeminjamenTable
             ->columns([
                 TextColumn::make('siswa.name')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('buku.judul')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('tanggal_dipinjam')
                     ->date('d M, Y')
                     ->sortable(),
