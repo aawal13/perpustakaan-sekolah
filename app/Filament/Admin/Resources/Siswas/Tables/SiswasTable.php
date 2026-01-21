@@ -15,8 +15,10 @@ class SiswasTable
     {
         return $table
             ->columns([
-                TextColumn::make('nis'),
-                TextColumn::make('name'),
+                TextColumn::make('nis')
+                ->label('NIS'),
+                TextColumn::make('name')
+                ->label('Nama'),
                 TextColumn::make('jenis_kelamin'),
 
             ])

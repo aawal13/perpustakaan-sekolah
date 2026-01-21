@@ -2,19 +2,22 @@
 
 namespace App\Filament\Admin\Resources\Peminjamen\Tables;
 
-use Filament\Tables\Table;
-use App\Enums\StatusPeminjaman;
 use App\Models\Setting;
+use App\Models\Peminjaman;
+use Filament\Tables\Table;
 use Filament\Actions\Action;
-use Filament\Actions\ActionGroup;
+use App\Enums\StatusPeminjaman;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\TextInput;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\DatePicker;
 
 class PeminjamenTable
 {
@@ -62,6 +65,13 @@ class PeminjamenTable
                 ViewAction::make()
                     ->label('Detail'),
                 EditAction::make(),
+                DeleteAction::make()
+                    ->label('Hapus')
+                    ->successNotification(
+                        Notification::make()
+                        ->success()
+                        ->title('Peminjaman di hapus')
+                    ),
                 Action::make('kembalikan_buku')
                     ->label('Kembalikan buku')
                     ->color('success')
@@ -92,9 +102,7 @@ class PeminjamenTable
                 ])
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                    DeleteBulkAction::make()
             ]);
     }
 }
