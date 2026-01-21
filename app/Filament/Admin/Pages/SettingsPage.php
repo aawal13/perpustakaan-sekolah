@@ -51,16 +51,13 @@ class SettingsPage extends Page implements HasSchemas
                 ->schema([
                 TextInput::make('denda_perhari')
                     ->label('Denda per Hari')
-                    ->numeric()
-                    ->required(),
+                    ->numeric(),
                 TextInput::make('max_denda')
                     ->label('Maksimal Denda')
-                    ->numeric()
-                    ->required(),
+                    ->numeric(),
                 TextInput::make('maks_hari_pinjam')
                     ->label('Maksimal Hari Pinjam')
                     ->numeric()
-                    ->required()
                     ->minValue(1),
 
             ])

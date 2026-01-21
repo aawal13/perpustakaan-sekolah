@@ -45,26 +45,33 @@ class Peminjaman extends Model
         // ===============================
         if (is_null($this->tanggal_dikembalikan)) {
 
-            $hariDipinjam = $tanggalPinjam
-                ->diffInDays(now()->startOfDay());
-
-            if ($hariDipinjam > $maksHariPinjam) {
-                $hariTerlambat = $hariDipinjam - $maksHariPinjam;
-
-                $this->status = StatusPeminjaman::TERLAMBAT;
-
-                $totalDenda = $hariTerlambat * $dendaPerHari;
-
-                $this->denda = $maksDenda > 0
-                    ? min($totalDenda, $maksDenda)
-                    : $totalDenda;
-            } else {
-                $this->status = StatusPeminjaman::DIPINJAM;
-                $this->denda  = 0;
-            }
-
+        // 🔴 TIDAK ADA BATAS PINJAM
+        if ($maksHariPinjam <= 0) {
+            $this->status = StatusPeminjaman::DIPINJAM;
+            $this->denda  = 0;
             return;
         }
+
+        $hariDipinjam = $tanggalPinjam
+            ->diffInDays(now()->startOfDay());
+
+        if ($hariDipinjam > $maksHariPinjam) {
+            $hariTerlambat = $hariDipinjam - $maksHariPinjam;
+
+            $this->status = StatusPeminjaman::TERLAMBAT;
+
+            $totalDenda = $hariTerlambat * $dendaPerHari;
+
+            $this->denda = $maksDenda > 0
+                ? min($totalDenda, $maksDenda)
+                : $totalDenda;
+        } else {
+            $this->status = StatusPeminjaman::DIPINJAM;
+            $this->denda  = 0;
+        }
+
+        return;
+    }
 
         // ===============================
         // SUDAH DIKEMBALIKAN
@@ -103,8 +110,8 @@ class Peminjaman extends Model
     }
 
     public function batasPeminjaman(): Attribute
-    {
-         return Attribute::make(
+{
+    return Attribute::make(
         get: function () {
             if (! $this->tanggal_dipinjam) {
                 return null;
@@ -112,9 +119,15 @@ class Peminjaman extends Model
 
             $maksHariPinjam = (int) Setting::get('maks_hari_pinjam', 0);
 
+            // 🔴 TIDAK ADA BATAS
+            if ($maksHariPinjam <= 0) {
+                return null;
+            }
+
             return Carbon::parse($this->tanggal_dipinjam)
                 ->addDays($maksHariPinjam);
         }
     );
-    }
+}
+
 }

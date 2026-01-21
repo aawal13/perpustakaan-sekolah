@@ -32,14 +32,17 @@ class PeminjamenTable
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('tanggal_dipinjam')
-                    ->date()
+                    ->date('d M, Y')
                     ->sortable(),
                 TextColumn::make('batas_peminjaman')
-                    ->date()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->getStateUsing(function ($record) {
+                        return $record->batas_peminjaman
+                            ? $record->batas_peminjaman->format('d M, Y')
+                            : '-';
+                    }),
                 TextColumn::make('tanggal_dikembalikan')
-                    ->date()
+                    ->date('d M, Y')
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()
