@@ -6,7 +6,7 @@ use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 use Illuminate\Contracts\Support\Htmlable;
 
-enum StatusPeminjaman: string implements HasLabel, HasColor
+enum StatusPeminjaman: string implements HasColor, HasLabel
 {
     case DIPINJAM = 'dipinjam';
     case DIKEMBALIKAN = 'dikembalikan';

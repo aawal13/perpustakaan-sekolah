@@ -2,20 +2,19 @@
 
 namespace App\Filament\Admin\Resources\Peminjamen\Tables;
 
-use App\Models\Setting;
-use Filament\Tables\Table;
-use Filament\Actions\Action;
 use App\Enums\StatusPeminjaman;
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteAction;
-use Filament\Support\Icons\Heroicon;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Filament\Forms\Components\DatePicker;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 
 class PeminjamenTable
 {
@@ -48,7 +47,7 @@ class PeminjamenTable
                     ->badge()
                     ->label('Status'),
                 TextColumn::make('denda')
-                    ->money('ID',true)
+                    ->money('ID', true)
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
@@ -65,56 +64,56 @@ class PeminjamenTable
             ])
             ->recordActions([
                 ActionGroup::make([
-                ViewAction::make()
-                    ->label('Detail'),
-                EditAction::make(),
-                DeleteAction::make()
-                    ->label('Hapus')
-                    ->successNotification(
-                        Notification::make()
-                        ->success()
-                        ->title('Peminjaman di hapus')
-                    ),
-                Action::make('kembalikan_buku')
-                    ->label('Kembalikan buku')
-                    ->color('success')
-                    ->icon(Heroicon::ArrowLeftEndOnRectangle)
-                    ->visible(fn ($record) => $record->status === StatusPeminjaman::DIPINJAM || $record->status === StatusPeminjaman::TERLAMBAT)
-                    ->schema([
-                        TextInput::make('batas_peminjaman')
-                            ->label('Batas Peminjaman')
-                            ->disabled()
-                            ->dehydrated(false)
-                            ->default(function ($record) {
-                                if (! $record->batas_peminjaman) {
-                                    return '-';
-                                }
+                    ViewAction::make()
+                        ->label('Detail'),
+                    EditAction::make(),
+                    DeleteAction::make()
+                        ->label('Hapus')
+                        ->successNotification(
+                            Notification::make()
+                                ->success()
+                                ->title('Peminjaman di hapus')
+                        ),
+                    Action::make('kembalikan_buku')
+                        ->label('Kembalikan buku')
+                        ->color('success')
+                        ->icon(Heroicon::ArrowLeftEndOnRectangle)
+                        ->visible(fn ($record) => $record->status === StatusPeminjaman::DIPINJAM || $record->status === StatusPeminjaman::TERLAMBAT)
+                        ->schema([
+                            TextInput::make('batas_peminjaman')
+                                ->label('Batas Peminjaman')
+                                ->disabled()
+                                ->dehydrated(false)
+                                ->default(function ($record) {
+                                    if (! $record->batas_peminjaman) {
+                                        return '-';
+                                    }
 
-                                return $record->batas_peminjaman->format('d M Y');
-                            }),
+                                    return $record->batas_peminjaman->format('d M Y');
+                                }),
 
-                        DatePicker::make('tanggal_dikembalikan')
-                            ->default(now())
-                            ->native(false)
-                            ->minDate(fn ($record) => $record->tanggal_dipinjam)
-                            ->required(),
+                            DatePicker::make('tanggal_dikembalikan')
+                                ->default(now())
+                                ->native(false)
+                                ->minDate(fn ($record) => $record->tanggal_dipinjam)
+                                ->required(),
 
-            ])
-            ->action(function (array $data, $record) {
+                        ])
+                        ->action(function (array $data, $record) {
 
-                $record->update([
-                    'tanggal_dikembalikan' => $data['tanggal_dikembalikan'],
-                    'status' => StatusPeminjaman::DIKEMBALIKAN,
-                ]);
+                            $record->update([
+                                'tanggal_dikembalikan' => $data['tanggal_dikembalikan'],
+                                'status' => StatusPeminjaman::DIKEMBALIKAN,
+                            ]);
 
-                $record->refreshStatusDanDenda();
-            })
-            ->successNotificationTitle('Buku berhasil dikembalikan')
+                            $record->refreshStatusDanDenda();
+                        })
+                        ->successNotificationTitle('Buku berhasil dikembalikan'),
 
-                ])
+                ]),
             ])
             ->toolbarActions([
-                    DeleteBulkAction::make()
+                DeleteBulkAction::make()
             ]);
     }
 }

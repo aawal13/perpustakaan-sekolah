@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Buku extends Model
 {
     protected $table = 'buku';
+
     protected $fillable = [
         'judul',
         'pengarang',
         'penerbit',
         'tahun_terbit',
         'kategori_id',
-        'stok'
+        'stok',
     ];
 
     public function kategori()

@@ -25,8 +25,7 @@ class SiswaResource extends Resource
 
     protected static ?string $pluralModelLabel = 'siswa';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Data';
-
+    protected static string|UnitEnum|null $navigationGroup = 'Data';
 
     protected static ?string $recordTitleAttribute = 'name';
 

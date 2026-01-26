@@ -27,7 +27,7 @@ class BukuResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Data';
+    protected static string|UnitEnum|null $navigationGroup = 'Data';
 
     public static function form(Schema $schema): Schema
     {

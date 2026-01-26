@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\Bukus\Tables;
 
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -40,7 +39,7 @@ class BukusTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                    DeleteBulkAction::make()
+                DeleteBulkAction::make(),
             ]);
     }
 }

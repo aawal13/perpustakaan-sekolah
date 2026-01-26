@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use App\Models\Setting;
 use App\Enums\StatusPeminjaman;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
 
 class Peminjaman extends Model
 {
@@ -35,8 +34,8 @@ class Peminjaman extends Model
         // AMBIL DARI SETTINGS
         // ===============================
         $maksHariPinjam = (int) Setting::get('maks_hari_pinjam', 0);
-        $dendaPerHari   = (int) Setting::get('denda_perhari', 0);
-        $maksDenda      = (int) Setting::get('max_denda', 0);
+        $dendaPerHari = (int) Setting::get('denda_perhari', 0);
+        $maksDenda = (int) Setting::get('max_denda', 0);
 
         $tanggalPinjam = $this->tanggal_dipinjam->startOfDay();
 
@@ -45,33 +44,34 @@ class Peminjaman extends Model
         // ===============================
         if (is_null($this->tanggal_dikembalikan)) {
 
-        // 🔴 TIDAK ADA BATAS PINJAM
-        if ($maksHariPinjam <= 0) {
-            $this->status = StatusPeminjaman::DIPINJAM;
-            $this->denda  = 0;
+            // 🔴 TIDAK ADA BATAS PINJAM
+            if ($maksHariPinjam <= 0) {
+                $this->status = StatusPeminjaman::DIPINJAM;
+                $this->denda = 0;
+
+                return;
+            }
+
+            $hariDipinjam = $tanggalPinjam
+                ->diffInDays(now()->startOfDay());
+
+            if ($hariDipinjam > $maksHariPinjam) {
+                $hariTerlambat = $hariDipinjam - $maksHariPinjam;
+
+                $this->status = StatusPeminjaman::TERLAMBAT;
+
+                $totalDenda = $hariTerlambat * $dendaPerHari;
+
+                $this->denda = $maksDenda > 0
+                    ? min($totalDenda, $maksDenda)
+                    : $totalDenda;
+            } else {
+                $this->status = StatusPeminjaman::DIPINJAM;
+                $this->denda = 0;
+            }
+
             return;
         }
-
-        $hariDipinjam = $tanggalPinjam
-            ->diffInDays(now()->startOfDay());
-
-        if ($hariDipinjam > $maksHariPinjam) {
-            $hariTerlambat = $hariDipinjam - $maksHariPinjam;
-
-            $this->status = StatusPeminjaman::TERLAMBAT;
-
-            $totalDenda = $hariTerlambat * $dendaPerHari;
-
-            $this->denda = $maksDenda > 0
-                ? min($totalDenda, $maksDenda)
-                : $totalDenda;
-        } else {
-            $this->status = StatusPeminjaman::DIPINJAM;
-            $this->denda  = 0;
-        }
-
-        return;
-    }
 
         // ===============================
         // SUDAH DIKEMBALIKAN
@@ -84,7 +84,7 @@ class Peminjaman extends Model
         $totalDenda = $hariTerlambat * $dendaPerHari;
 
         $this->status = StatusPeminjaman::DIKEMBALIKAN;
-        $this->denda  = $maksDenda > 0
+        $this->denda = $maksDenda > 0
             ? min($totalDenda, $maksDenda)
             : $totalDenda;
     }
@@ -110,24 +110,23 @@ class Peminjaman extends Model
     }
 
     public function batasPeminjaman(): Attribute
-{
-    return Attribute::make(
-        get: function () {
-            if (! $this->tanggal_dipinjam) {
-                return null;
+    {
+        return Attribute::make(
+            get: function () {
+                if (! $this->tanggal_dipinjam) {
+                    return null;
+                }
+
+                $maksHariPinjam = (int) Setting::get('maks_hari_pinjam', 0);
+
+                // 🔴 TIDAK ADA BATAS
+                if ($maksHariPinjam <= 0) {
+                    return null;
+                }
+
+                return Carbon::parse($this->tanggal_dipinjam)
+                    ->addDays($maksHariPinjam);
             }
-
-            $maksHariPinjam = (int) Setting::get('maks_hari_pinjam', 0);
-
-            // 🔴 TIDAK ADA BATAS
-            if ($maksHariPinjam <= 0) {
-                return null;
-            }
-
-            return Carbon::parse($this->tanggal_dipinjam)
-                ->addDays($maksHariPinjam);
-        }
-    );
-}
-
+        );
+    }
 }

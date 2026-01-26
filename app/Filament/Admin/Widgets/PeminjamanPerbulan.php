@@ -2,11 +2,11 @@
 
 namespace App\Filament\Admin\Widgets;
 
-use Carbon\Carbon;
 use App\Models\Peminjaman;
+use Carbon\Carbon;
+use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
-use Filament\Widgets\ChartWidget;
 
 class PeminjamanPerbulan extends ChartWidget
 {
@@ -20,35 +20,33 @@ class PeminjamanPerbulan extends ChartWidget
 
     protected function getData(): array
     {
-       
-    $year = (int) ($this->filter ?? now()->year);
 
-    $start = Carbon::create($year, 1, 1)->startOfYear();
-    $end   = Carbon::create($year, 12, 31)->endOfYear();
+        $year = (int) ($this->filter ?? now()->year);
 
-    $data = Trend::model(Peminjaman::class)
-        ->dateColumn('tanggal_dipinjam')
-        ->between(
-            start: $start,
-            end: $end,
-        )
-        ->perMonth()
-        ->count();
+        $start = Carbon::create($year, 1, 1)->startOfYear();
+        $end = Carbon::create($year, 12, 31)->endOfYear();
+
+        $data = Trend::model(Peminjaman::class)
+            ->dateColumn('tanggal_dipinjam')
+            ->between(
+                start: $start,
+                end: $end,
+            )
+            ->perMonth()
+            ->count();
 
         return [
-        'datasets' => [
-            [
-                'label' => "Peminjaman Tahun {$year}",
-                'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+            'datasets' => [
+                [
+                    'label' => "Peminjaman Tahun {$year}",
+                    'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
+                ],
             ],
-        ],
-        'labels' => $data->map(
-            fn (TrendValue $value) =>
-                Carbon::parse($value->date)->translatedFormat('M')
-        ),
-    ];
-}
-
+            'labels' => $data->map(
+                fn (TrendValue $value) => Carbon::parse($value->date)->translatedFormat('M')
+            ),
+        ];
+    }
 
     protected function getFilters(): ?array
     {
@@ -64,7 +62,7 @@ class PeminjamanPerbulan extends ChartWidget
 
     protected function getDefaultFilter(): ?string
     {
-        return (string) now()->year;  
+        return (string) now()->year;
     }
 
     public function getDescription(): ?string
@@ -77,12 +75,12 @@ class PeminjamanPerbulan extends ChartWidget
         return [
             'responsive' => true,
             'scales' => [
-            'y' => [
-                'ticks' => [
-                    'precision' => 0,
+                'y' => [
+                    'ticks' => [
+                        'precision' => 0,
+                    ],
                 ],
             ],
-        ],
         ];
     }
 

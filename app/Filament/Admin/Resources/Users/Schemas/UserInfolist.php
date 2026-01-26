@@ -12,6 +12,8 @@ class UserInfolist
         return $schema
             ->components([
                 TextEntry::make('name'),
+                TextEntry::make('no_identitas')
+                    ->label('No identitas'),
                 TextEntry::make('email')
                     ->label('Email address'),
                 TextEntry::make('roles.name'),

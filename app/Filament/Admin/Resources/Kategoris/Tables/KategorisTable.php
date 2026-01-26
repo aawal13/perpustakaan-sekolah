@@ -21,8 +21,8 @@ class KategorisTable
             ->columns([
                 TextColumn::make('kategori_buku')->searchable(),
                 TextColumn::make('bukus_count')
-                ->label('Total Buku')
-                ->sortable()
+                    ->label('Total Buku')
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -32,7 +32,7 @@ class KategorisTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                    DeleteBulkAction::make()
+                DeleteBulkAction::make(),
             ]);
     }
 }

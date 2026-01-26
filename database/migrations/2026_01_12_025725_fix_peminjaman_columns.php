@@ -10,7 +10,8 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    { Schema::table('peminjaman', function (Blueprint $table) {
+    {
+        Schema::table('peminjaman', function (Blueprint $table) {
             $table->date('tanggal_dikembalikan')->nullable()->change();
             $table->date('tanggal_dipinjam')->nullable()->change();
             $table->dropForeign(['buku_id']);
@@ -26,7 +27,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-         Schema::table('peminjaman', function (Blueprint $table) {
+        Schema::table('peminjaman', function (Blueprint $table) {
             $table->dropForeign(['buku_id']);
             $table->foreign('buku_id')
                 ->references('id')

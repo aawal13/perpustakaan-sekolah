@@ -2,13 +2,13 @@
 
 namespace App\Filament\Admin\Resources\Peminjamen\Pages;
 
-use App\Models\Peminjaman;
 use App\Enums\StatusPeminjaman;
+use App\Filament\Admin\Resources\Peminjamen\PeminjamanResource;
+use App\Models\Peminjaman;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Admin\Resources\Peminjamen\PeminjamanResource;
 
 class ListPeminjamen extends ListRecords
 {
@@ -29,32 +29,29 @@ class ListPeminjamen extends ListRecords
     {
         return [
             CreateAction::make()
-            ->label('Buat peminjaman'),
+                ->label('Buat peminjaman'),
         ];
     }
-    
+
     public function getTabs(): array
-{
+    {
         return [
-        'Semua' => Tab::make(),
+            'Semua' => Tab::make(),
 
-        'Dipinjam' => Tab::make()
-            ->badge(fn () => Peminjaman::where('status', StatusPeminjaman::DIPINJAM)->count())
-            ->modifyQueryUsing(fn (Builder $query) =>
-                $query->where('status', StatusPeminjaman::DIPINJAM)
-            ),
+            'Dipinjam' => Tab::make()
+                ->badge(fn () => Peminjaman::where('status', StatusPeminjaman::DIPINJAM)->count())
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusPeminjaman::DIPINJAM)
+                ),
 
-        'Dikembalikan' => Tab::make()
-            ->badge(fn () => Peminjaman::where('status', StatusPeminjaman::DIKEMBALIKAN)->count())
-            ->modifyQueryUsing(fn (Builder $query) =>
-                $query->where('status', StatusPeminjaman::DIKEMBALIKAN)
-            ),
+            'Dikembalikan' => Tab::make()
+                ->badge(fn () => Peminjaman::where('status', StatusPeminjaman::DIKEMBALIKAN)->count())
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusPeminjaman::DIKEMBALIKAN)
+                ),
 
-        'Terlambat' => Tab::make()
-            ->badge(fn () => Peminjaman::where('status', StatusPeminjaman::TERLAMBAT)->count())
-            ->modifyQueryUsing(fn (Builder $query) =>
-                $query->where('status', StatusPeminjaman::TERLAMBAT)
-            ),
-    ];
-}
+            'Terlambat' => Tab::make()
+                ->badge(fn () => Peminjaman::where('status', StatusPeminjaman::TERLAMBAT)->count())
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', StatusPeminjaman::TERLAMBAT)
+                ),
+        ];
+    }
 }
