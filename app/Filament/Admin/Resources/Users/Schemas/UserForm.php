@@ -33,7 +33,7 @@ class UserForm
                     ->searchable()
                     ->live(),
                 Select::make('no_identitas')
-                    ->label('pilih siswa')
+                    ->label('Pilih siswa')
                     ->relationship('siswa', 'name')
                     ->searchable()
                     ->preload()

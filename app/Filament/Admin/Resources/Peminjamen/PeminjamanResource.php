@@ -15,6 +15,8 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Facades\Filament;
 
 class PeminjamanResource extends Resource
 {
@@ -30,22 +32,42 @@ class PeminjamanResource extends Resource
     {
         return PeminjamanForm::configure($schema);
     }
-
+    
     public static function infolist(Schema $schema): Schema
     {
         return PeminjamanInfolist::configure($schema);
     }
-
+    
     public static function table(Table $table): Table
     {
         return PeminjamenTable::configure($table);
     }
+
 
     public static function getRelations(): array
     {
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        $user = Filament::auth()->user();
+
+        if (! $user) {
+            return $query;
+        }
+
+        if ($user->hasRole('Siswa') && filled($user->no_identitas)) {
+            return $query->whereHas('siswa', function ($q) use ($user) {
+                $q->where('nis', $user->no_identitas);
+            });
+        }
+
+        return $query;
     }
 
     public static function getPages(): array

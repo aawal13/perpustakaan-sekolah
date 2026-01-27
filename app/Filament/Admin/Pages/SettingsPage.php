@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Pages;
 
 use App\Models\Setting;
 use BackedEnum;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -17,7 +18,7 @@ use UnitEnum;
 
 class SettingsPage extends Page implements HasSchemas
 {
-    use InteractsWithSchemas;
+    use InteractsWithSchemas, HasPageShield;
 
     protected string $view = 'filament.admin.pages.settings-page';
 
