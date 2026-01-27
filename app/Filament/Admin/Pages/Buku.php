@@ -26,7 +26,7 @@ class Buku extends Page implements HasActions, HasSchemas, HasTable
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookOpen;
 
-    protected static string|UnitEnum|null $navigationGroup = 'rekap';
+    protected static string|UnitEnum|null $navigationGroup = 'Rekap';
 
     public function table(Table $table): Table
     {
