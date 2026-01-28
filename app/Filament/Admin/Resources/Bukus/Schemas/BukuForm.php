@@ -14,7 +14,8 @@ class BukuForm
             ->components([
                 TextInput::make('judul')
                     ->required(),
-                TextInput::make('pengarang'),
+                TextInput::make('pengarang')
+                    ->required(),
                 TextInput::make('penerbit'),
                 TextInput::make('tahun_terbit')
                     ->numeric(),
