@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Widgets;
 
 use App\Models\Peminjaman;
 use Carbon\Carbon;
+use Filament\Facades\Filament;
 use Filament\Widgets\ChartWidget;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
@@ -26,7 +27,20 @@ class PeminjamanPerbulan extends ChartWidget
         $start = Carbon::create($year, 1, 1)->startOfYear();
         $end = Carbon::create($year, 12, 31)->endOfYear();
 
-        $data = Trend::model(Peminjaman::class)
+        $user = Filament::auth()->user();
+        $isSiswa = $user && $user->hasRole('Siswa');
+
+        $query = Peminjaman::query();
+
+        // Filter untuk siswa
+        if ($isSiswa) {
+            $siswa = $user->siswa;
+            if ($siswa) {
+                $query->where('siswa_id', $siswa->id);
+            }
+        }
+
+        $data = Trend::query($query)
             ->dateColumn('tanggal_dipinjam')
             ->between(
                 start: $start,
@@ -35,10 +49,12 @@ class PeminjamanPerbulan extends ChartWidget
             ->perMonth()
             ->count();
 
+        $label = $isSiswa ? "Peminjaman Saya Tahun {$year}" : "Peminjaman Tahun {$year}";
+
         return [
             'datasets' => [
                 [
-                    'label' => "Peminjaman Tahun {$year}",
+                    'label' => $label,
                     'data' => $data->map(fn (TrendValue $value) => $value->aggregate),
                 ],
             ],
