@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources\Bukus\Tables;
 
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -39,7 +40,8 @@ class BukusTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                DeleteBulkAction::make(),
+                DeleteBulkAction::make()
+                    ->visible(fn () => !Filament::auth()->user()->hasRole('Siswa')),
             ]);
     }
 }
