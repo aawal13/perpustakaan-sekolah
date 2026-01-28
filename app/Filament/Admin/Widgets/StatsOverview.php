@@ -51,31 +51,6 @@ class StatsOverview extends StatsOverviewWidget
         )
     ),
 ];
-return [
-    Stat::make('Total Buku', Buku::count()),
-
-    Stat::make(
-        'Total Peminjaman',
-        (clone $peminjamanQuery)->count()
-    ),
-
-    Stat::make(
-        'Total Dipinjam',
-        (clone $peminjamanQuery)
-            ->where('status', StatusPeminjaman::DIPINJAM)
-            ->count()
-    ),
-
-    Stat::make(
-        'Total Denda',
-        'Rp ' . number_format(
-            (clone $peminjamanQuery)->sum('denda'),
-            0,
-            ',',
-            '.'
-        )
-    ),
-];
 
     }
 }
