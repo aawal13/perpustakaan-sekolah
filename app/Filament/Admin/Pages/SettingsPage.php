@@ -38,6 +38,7 @@ class SettingsPage extends Page implements HasSchemas
             'denda_perhari' => Setting::get('denda_perhari'),
             'max_denda' => Setting::get('max_denda'),
             'maks_hari_pinjam' => setting::get('maks_hari_pinjam'),
+            'hari_menjelang_jatuh_tempo' => Setting::get('hari_menjelang_jatuh_tempo'),
         ]);
     }
 
@@ -62,6 +63,14 @@ class SettingsPage extends Page implements HasSchemas
 
                             ]),
                     ]),
+                Section::make('Widget Peminjaman')
+                    ->schema([
+                        TextInput::make('hari_menjelang_jatuh_tempo')
+                            ->label('Tampilkan Jika Jatuh Tempo Dalam (Hari)')
+                            ->numeric()
+                            ->default(3)
+                            ->minValue(1),
+                    ]),
             ])
             ->statePath('data');
     }
@@ -73,10 +82,11 @@ class SettingsPage extends Page implements HasSchemas
         Setting::set('denda_perhari', (int) $data['denda_perhari']);
         Setting::set('max_denda', (int) $data['max_denda']);
         Setting::set('maks_hari_pinjam', (int) $data['maks_hari_pinjam']);
+        Setting::set('hari_menjelang_jatuh_tempo', (int) $data['hari_menjelang_jatuh_tempo']);
 
         Notification::make()
             ->title('Berhasil')
-            ->body('Pengaturan denda berhasil disimpan')
+            ->body('Pengaturan berhasil disimpan')
             ->success()
             ->send();
 

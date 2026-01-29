@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Admin\Widgets\BukuYgMendekatiPeminjaman;
+use App\Filament\Admin\Widgets\PeminjamanPerbulan;
 use App\Filament\Admin\Widgets\StatsOverview;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
@@ -40,6 +42,8 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 StatsOverview::class,
                 AccountWidget::class,
+                PeminjamanPerbulan::class,
+                BukuYgMendekatiPeminjaman::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
 
