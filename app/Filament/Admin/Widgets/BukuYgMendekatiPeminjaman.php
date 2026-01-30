@@ -8,7 +8,6 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\HtmlString;
 use Filament\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,7 +24,6 @@ class BukuYgMendekatiPeminjaman extends TableWidget
         $isSiswa = $user->hasRole('Siswa');
 
             $heading = "Buku yang Mendekati Batas Peminjaman";
-            $description = new HtmlString("Daftar batas peminjaman akan muncul di mulai tanggal hari ini lalu di + {$hariMenjelangJatuhTempo} hari ke depan dan batas peminjaman yang sudah mau jatuh tempo akan paling di atas.");
         
 
         $query = Peminjaman::query()
@@ -41,7 +39,6 @@ class BukuYgMendekatiPeminjaman extends TableWidget
 
         return $table
             ->heading($heading)
-            ->description($description)
             ->paginated()
             ->query(fn(): Builder => $query)
             ->columns([
