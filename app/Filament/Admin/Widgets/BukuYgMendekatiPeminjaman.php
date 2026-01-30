@@ -26,11 +26,15 @@ class BukuYgMendekatiPeminjaman extends TableWidget
             $heading = "Buku yang Mendekati Batas Peminjaman";
         
 
-        $query = Peminjaman::query()
-            ->whereNull('tanggal_dikembalikan') // Hanya yang belum dikembalikan
-            ->whereDate(DB::raw("DATE_ADD(tanggal_dipinjam, INTERVAL {$maksHariPinjam} DAY)"), '>=', now())
-            ->whereDate(DB::raw("DATE_ADD(tanggal_dipinjam, INTERVAL {$maksHariPinjam} DAY)"), '<=', now()->addDays($hariMenjelangJatuhTempo))
-            ->orderBy(DB::raw("DATE_ADD(tanggal_dipinjam, INTERVAL {$maksHariPinjam} DAY)"), 'asc');
+        if ($maksHariPinjam <= 0) {
+            $query = Peminjaman::query()->whereRaw('1=0');
+        } else {
+            $query = Peminjaman::query()
+                ->whereNull('tanggal_dikembalikan') // Hanya yang belum dikembalikan
+                ->whereDate(DB::raw("DATE_ADD(tanggal_dipinjam, INTERVAL {$maksHariPinjam} DAY)"), '>=', now())
+                ->whereDate(DB::raw("DATE_ADD(tanggal_dipinjam, INTERVAL {$maksHariPinjam} DAY)"), '<=', now()->addDays($hariMenjelangJatuhTempo))
+                ->orderBy(DB::raw("DATE_ADD(tanggal_dipinjam, INTERVAL {$maksHariPinjam} DAY)"), 'asc');
+        }
 
         // Jika user adalah siswa, filter hanya peminjaman mereka sendiri
         if ($isSiswa && $user->siswa) {
