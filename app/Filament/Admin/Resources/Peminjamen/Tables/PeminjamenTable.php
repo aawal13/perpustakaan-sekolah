@@ -108,7 +108,8 @@ class PeminjamenTable
 
                             $record->refreshStatusDanDenda();
                         })
-                        ->successNotificationTitle('Buku berhasil dikembalikan'),
+                        ->successNotificationTitle('Buku berhasil dikembalikan')
+                        ->visible(fn () => !auth()->user()->hasRole('Siswa')),
 
                 ]),
             ])
