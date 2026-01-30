@@ -11,6 +11,11 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class StatsOverview extends StatsOverviewWidget
 {
+    protected function getColumns(): int
+    {
+        return 5;
+    }
+
     protected function getStats(): array
     {
         $user = Filament::auth()->user();
@@ -27,17 +32,24 @@ class StatsOverview extends StatsOverviewWidget
         }
 
         return [
-    Stat::make('Total Buku', Buku::count()),
+    Stat::make('Jumlah Buku', Buku::count()),
 
     Stat::make(
-        'Total Peminjaman',
+        'Jumlah Peminjaman',
         (clone $peminjamanQuery)->count()
     ),
 
     Stat::make(
-        'Total Dipinjam',
+        'Status Dipinjam',
         (clone $peminjamanQuery)
             ->where('status', StatusPeminjaman::DIPINJAM)
+            ->count()
+    ),
+    
+    Stat::make(
+        'Status Terlambat',
+        (clone $peminjamanQuery)
+            ->where('status', StatusPeminjaman::TERLAMBAT)
             ->count()
     ),
 
