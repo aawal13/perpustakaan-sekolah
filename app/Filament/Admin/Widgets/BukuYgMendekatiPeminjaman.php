@@ -43,7 +43,8 @@ class BukuYgMendekatiPeminjaman extends TableWidget
             ->query(fn(): Builder => $query)
             ->columns([
                 TextColumn::make('siswa.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->visible(fn () => !auth()->user()->hasRole('Siswa')),
                 TextColumn::make('buku.judul')
                     ->label('Judul')
                     ->searchable(),
