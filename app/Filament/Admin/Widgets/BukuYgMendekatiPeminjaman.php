@@ -75,6 +75,7 @@ class BukuYgMendekatiPeminjaman extends TableWidget
                 BulkActionGroup::make([
                     //
                 ]),
-            ]);
+            ])
+            ->emptyStateHeading('No Peminjaman');
     }
 }
