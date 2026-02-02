@@ -24,6 +24,65 @@ class Peminjaman extends Model
         'tanggal_dikembalikan' => 'date',
     ];
 
+    /**
+     * Track previous status for stock updates
+     */
+    protected $previousStatus = null;
+
+    /**
+     * Boot method to track status changes
+     */
+    protected static function booted()
+    {
+        // Save previous status before updating
+        static::updating(function ($peminjaman) {
+            if ($peminjaman->isDirty('status')) {
+                $peminjaman->previousStatus = $peminjaman->getOriginal('status');
+            }
+        });
+
+        // Handle stock updates after save
+        static::saved(function ($peminjaman) {
+            $peminjaman->updateStokBuku();
+        });
+
+        // Handle stock when creating new peminjaman
+        static::created(function ($peminjaman) {
+            // Initial status should be DIPINJAM, so decrease stock
+            $peminjaman->buku->decrement('stok');
+        });
+
+        // Handle stock when deleting peminjaman
+        static::deleting(function ($peminjaman) {
+            // If still borrowed, restore the stock
+            if (in_array($peminjaman->status, [StatusPeminjaman::DIPINJAM, StatusPeminjaman::TERLAMBAT])) {
+                $peminjaman->buku->increment('stok');
+            }
+        });
+    }
+
+    /**
+     * Update book stock based on status changes
+     */
+    public function updateStokBuku(): void
+    {
+        if (is_null($this->previousStatus)) {
+            return;
+        }
+
+        // Status changed from returned to borrowed - decrease stock
+        if ($this->previousStatus === StatusPeminjaman::DIKEMBALIKAN &&
+            in_array($this->status, [StatusPeminjaman::DIPINJAM, StatusPeminjaman::TERLAMBAT])) {
+            $this->buku->decrement('stok');
+        }
+
+        // Status changed from borrowed to returned - increase stock
+        if (in_array($this->previousStatus, [StatusPeminjaman::DIPINJAM, StatusPeminjaman::TERLAMBAT]) &&
+            $this->status === StatusPeminjaman::DIKEMBALIKAN) {
+            $this->buku->increment('stok');
+        }
+    }
+
     public function refreshStatusDanDenda(): void
     {
         if (is_null($this->tanggal_dipinjam)) {
@@ -87,13 +146,6 @@ class Peminjaman extends Model
         $this->denda = $maksDenda > 0
             ? min($totalDenda, $maksDenda)
             : $totalDenda;
-    }
-
-    protected static function booted()
-    {
-        static::saving(function ($peminjaman) {
-            $peminjaman->refreshStatusDanDenda();
-        });
     }
 
     // ===============================

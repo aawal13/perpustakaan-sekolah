@@ -32,6 +32,11 @@ class BukusTable
                     ->searchable(),
                 TextColumn::make('stok')
                     ->label('Tersedia')
+                    ->badge()
+                    ->color(fn($record) =>
+                         $record->stok === 0 ?'danger':
+                         ($record->stok <= 5 ? 'warning' : 'success')
+                    )
             ])
             ->filters([
                 SelectFilter::make('kategori')
