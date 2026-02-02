@@ -47,7 +47,7 @@ class PeminjamanTable
                     ->badge()
                     ->label('Status'),
                 TextColumn::make('denda')
-                    ->money('ID', true)
+                    ->money('IDR', true)
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
@@ -78,7 +78,11 @@ class PeminjamanTable
                         ->label('Kembalikan buku')
                         ->color('success')
                         ->icon(Heroicon::ArrowLeftEndOnRectangle)
-                        ->visible(fn ($record) => $record->status === StatusPeminjaman::DIPINJAM || $record->status === StatusPeminjaman::TERLAMBAT)
+                        ->visible(fn ($record) => 
+                            !auth()->user()->hasRole('Siswa') && 
+                            ($record->status === StatusPeminjaman::DIPINJAM || 
+                             $record->status === StatusPeminjaman::TERLAMBAT)
+                        )
                         ->schema([
                             TextInput::make('batas_peminjaman')
                                 ->label('Batas Peminjaman')
@@ -100,16 +104,16 @@ class PeminjamanTable
 
                         ])
                         ->action(function (array $data, $record) {
-
-                            $record->update([
-                                'tanggal_dikembalikan' => $data['tanggal_dikembalikan'],
-                                'status' => StatusPeminjaman::DIKEMBALIKAN,
-                            ]);
-
-                            $record->refreshStatusDanDenda();
+                            // Set tanggal_dikembalikan
+                            $record->tanggal_dikembalikan = $data['tanggal_dikembalikan'];
+                            
+                            // Process pengembalian - will set status to DIKEMBALIKAN and update stock
+                            $record->processPengembalian();
+                            
+                            // Save the record
+                            $record->save();
                         })
-                        ->successNotificationTitle('Buku berhasil dikembalikan')
-                        ->visible(fn () => !auth()->user()->hasRole('Siswa')),
+                        ->successNotificationTitle('Buku berhasil dikembalikan'),
 
                 ]),
             ])
@@ -120,3 +124,4 @@ class PeminjamanTable
             ->emptyStateHeading('No Peminjaman');
     }
 }
+

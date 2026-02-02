@@ -43,13 +43,20 @@ class Peminjaman extends Model
 
         // Handle stock updates after save
         static::saved(function ($peminjaman) {
-            $peminjaman->updateStokBuku();
+            // Only update stock if this was a fresh create (no previous status)
+            // For status changes, stock is handled in refreshStatusDanDenda
+            if (is_null($peminjaman->previousStatus)) {
+                $peminjaman->updateStokBuku();
+            }
         });
 
         // Handle stock when creating new peminjaman
         static::created(function ($peminjaman) {
             // Initial status should be DIPINJAM, so decrease stock
             $peminjaman->buku->decrement('stok');
+            // Calculate initial status and fine
+            $peminjaman->calculateStatusDanDenda();
+            $peminjaman->save();
         });
 
         // Handle stock when deleting peminjaman
@@ -83,6 +90,73 @@ class Peminjaman extends Model
         }
     }
 
+    /**
+     * Calculate status and fine without saving
+     * Returns [status, denda] as raw values
+     */
+    public function calculateStatusDanDenda(): array
+    {
+        if (is_null($this->tanggal_dipinjam)) {
+            return [StatusPeminjaman::DIPINJAM, 0];
+        }
+
+        // ===============================
+        // AMBIL DARI SETTINGS
+        // ===============================
+        $maksHariPinjam = (int) Setting::get('maks_hari_pinjam', 0);
+        $dendaPerHari = (int) Setting::get('denda_perhari', 0);
+        $maksDenda = (int) Setting::get('max_denda', 0);
+
+        $tanggalPinjam = $this->tanggal_dipinjam->startOfDay();
+
+        // ===============================
+        // BELUM DIKEMBALIKAN
+        // ===============================
+        if (is_null($this->tanggal_dikembalikan)) {
+
+            // 🔴 TIDAK ADA BATAS PINJAM
+            if ($maksHariPinjam <= 0) {
+                return [StatusPeminjaman::DIPINJAM, 0];
+            }
+
+            $hariDipinjam = $tanggalPinjam
+                ->diffInDays(now()->startOfDay());
+
+            if ($hariDipinjam > $maksHariPinjam) {
+                $hariTerlambat = $hariDipinjam - $maksHariPinjam;
+
+                $totalDenda = $hariTerlambat * $dendaPerHari;
+
+                $finalDenda = $maksDenda > 0
+                    ? min($totalDenda, $maksDenda)
+                    : $totalDenda;
+
+                return [StatusPeminjaman::TERLAMBAT, $finalDenda];
+            }
+
+            return [StatusPeminjaman::DIPINJAM, 0];
+        }
+
+        // ===============================
+        // SUDAH DIKEMBALIKAN
+        // ===============================
+        $hariDipinjam = $tanggalPinjam
+            ->diffInDays($this->tanggal_dikembalikan->startOfDay());
+
+        $hariTerlambat = max(0, $hariDipinjam - $maksHariPinjam);
+
+        $totalDenda = $hariTerlambat * $dendaPerHari;
+
+        $finalDenda = $maksDenda > 0
+            ? min($totalDenda, $maksDenda)
+            : $totalDenda;
+
+        return [StatusPeminjaman::DIKEMBALIKAN, $finalDenda];
+    }
+
+    /**
+     * Refresh status and fine (legacy method - use calculateStatusDanDenda + save for better control)
+     */
     public function refreshStatusDanDenda(): void
     {
         if (is_null($this->tanggal_dipinjam)) {
@@ -148,6 +222,24 @@ class Peminjaman extends Model
             : $totalDenda;
     }
 
+    /**
+     * Handle status change and update stock accordingly
+     * Call this after changing tanggal_dikembalikan
+     */
+    public function processPengembalian(): void
+    {
+        $previousStatus = $this->status;
+        
+        // Calculate new status and fine
+        $this->refreshStatusDanDenda();
+        
+        // Update stock if status changed from borrowed/late to returned
+        if (in_array($previousStatus, [StatusPeminjaman::DIPINJAM, StatusPeminjaman::TERLAMBAT]) &&
+            $this->status === StatusPeminjaman::DIKEMBALIKAN) {
+            $this->buku->increment('stok');
+        }
+    }
+
     // ===============================
     // RELATIONS
     // ===============================
@@ -182,3 +274,4 @@ class Peminjaman extends Model
         );
     }
 }
+
