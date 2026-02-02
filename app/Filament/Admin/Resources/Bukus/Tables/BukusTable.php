@@ -20,16 +20,18 @@ class BukusTable
                     ->searchable(),
                 TextColumn::make('pengarang')
                     ->searchable(),
-                TextColumn::make('penerbit')
-                    ->placeholder('-')
-                    ->searchable(),
-                TextColumn::make('tahun_terbit')
-                    ->placeholder('-')
-                    ->numeric()
-                    ->sortable(),
+                // TextColumn::make('penerbit')
+                //     ->placeholder('-')
+                //     ->searchable(),
+                // TextColumn::make('tahun_terbit')
+                //     ->placeholder('-')
+                //     ->numeric()
+                //     ->sortable(),
                 TextColumn::make('kategori.kategori_buku')
                     ->placeholder('-')
                     ->searchable(),
+                TextColumn::make('stok')
+                    ->label('Tersedia')
             ])
             ->filters([
                 SelectFilter::make('kategori')
