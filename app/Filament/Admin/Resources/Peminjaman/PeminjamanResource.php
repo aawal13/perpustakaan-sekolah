@@ -26,7 +26,8 @@ class PeminjamanResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Peminjaman';
 
-    protected static ?string $recordTitleAttribute = 'id';
+    protected static ?string $slug = 'peminjaman';
+
 
     public static function form(Schema $schema): Schema
     {
@@ -54,7 +55,8 @@ class PeminjamanResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-
+        
+        /** @var \App\Models\User $user */
         $user = Filament::auth()->user();
 
         if (! $user) {
