@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Peminjaman\Schemas;
 
+use App\Models\Buku;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Schema;
@@ -22,7 +23,32 @@ class PeminjamanForm
                     ->relationship('buku', 'judul')
                     ->searchable()
                     ->required()
-                    ->preload(),
+                    ->preload()
+                    ->options(function () {
+                        return Buku::query()
+                            ->with('peminjaman')
+                            ->get()
+                            ->mapWithKeys(function (Buku $buku) {
+                                $stokTersedia = $buku->stok;
+                                $label = $buku->judul;
+                                
+                                if ($stokTersedia <= 0) {
+                                    $label .= ' (Stok Habis)';
+                                } else {
+                                    $label .= " (Tersedia: {$stokTersedia})";
+                                }
+                                
+                                return [$buku->id => $label];
+                            })
+                            ->toArray();
+                    })
+                    ->disableOptionWhen(function (int $value): bool {
+                        $buku = Buku::query()
+                            ->with('peminjaman')
+                            ->find($value);
+                        
+                        return $buku && $buku->stok <= 0;
+                    }),
 
                 DatePicker::make('tanggal_dipinjam')
                     ->default(now())
@@ -31,3 +57,4 @@ class PeminjamanForm
             ]);
     }
 }
+

@@ -41,53 +41,39 @@ class Peminjaman extends Model
             }
         });
 
-        // Handle stock updates after save
+        // Handle stock updates after save (for status changes)
         static::saved(function ($peminjaman) {
-            // Only update stock if this was a fresh create (no previous status)
-            // For status changes, stock is handled in refreshStatusDanDenda
-            if (is_null($peminjaman->previousStatus)) {
+            // Only update stock if status was changed
+            if (!is_null($peminjaman->previousStatus)) {
                 $peminjaman->updateStokBuku();
+                // Reset after processing
+                $peminjaman->previousStatus = null;
             }
         });
 
         // Handle stock when creating new peminjaman
+        // NOTE: Stock is calculated dynamically by accessor, no need to decrement database
         static::created(function ($peminjaman) {
-            // Initial status should be DIPINJAM, so decrease stock
-            $peminjaman->buku->decrement('stok');
             // Calculate initial status and fine
             $peminjaman->calculateStatusDanDenda();
             $peminjaman->save();
         });
 
         // Handle stock when deleting peminjaman
+        // NOTE: Stock is calculated dynamically, no need to increment database
         static::deleting(function ($peminjaman) {
-            // If still borrowed, restore the stock
-            if (in_array($peminjaman->status, [StatusPeminjaman::DIPINJAM, StatusPeminjaman::TERLAMBAT])) {
-                $peminjaman->buku->increment('stok');
-            }
+            // No stock manipulation needed - stock is calculated dynamically
         });
     }
 
     /**
      * Update book stock based on status changes
+     * NOTE: This method is kept for compatibility but stock is now calculated dynamically
      */
     public function updateStokBuku(): void
     {
-        if (is_null($this->previousStatus)) {
-            return;
-        }
-
-        // Status changed from returned to borrowed - decrease stock
-        if ($this->previousStatus === StatusPeminjaman::DIKEMBALIKAN &&
-            in_array($this->status, [StatusPeminjaman::DIPINJAM, StatusPeminjaman::TERLAMBAT])) {
-            $this->buku->decrement('stok');
-        }
-
-        // Status changed from borrowed to returned - increase stock
-        if (in_array($this->previousStatus, [StatusPeminjaman::DIPINJAM, StatusPeminjaman::TERLAMBAT]) &&
-            $this->status === StatusPeminjaman::DIKEMBALIKAN) {
-            $this->buku->increment('stok');
-        }
+        // Stock is now calculated dynamically by Buku::getStokAttribute()
+        // This method is no longer needed but kept for backward compatibility
     }
 
     /**
@@ -223,21 +209,13 @@ class Peminjaman extends Model
     }
 
     /**
-     * Handle status change and update stock accordingly
-     * Call this after changing tanggal_dikembalikan
+     * Handle status change for pengembalian
+     * Stock is calculated dynamically by Buku accessor
      */
     public function processPengembalian(): void
     {
-        $previousStatus = $this->status;
-        
         // Calculate new status and fine
         $this->refreshStatusDanDenda();
-        
-        // Update stock if status changed from borrowed/late to returned
-        if (in_array($previousStatus, [StatusPeminjaman::DIPINJAM, StatusPeminjaman::TERLAMBAT]) &&
-            $this->status === StatusPeminjaman::DIKEMBALIKAN) {
-            $this->buku->increment('stok');
-        }
     }
 
     // ===============================
