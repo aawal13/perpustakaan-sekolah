@@ -14,7 +14,7 @@ class Buku extends Model
      * Get the available stock (total stock minus borrowed books)
      * This is a computed attribute that calculates real-time stock
      */
-    public function getStokAttribute(): int
+    public function getStokAvailableAttribute(): int
     {
         $dipinjam = $this->peminjaman()
             ->whereIn('status', [StatusPeminjaman::DIPINJAM, StatusPeminjaman::TERLAMBAT])

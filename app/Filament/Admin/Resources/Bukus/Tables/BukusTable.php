@@ -30,13 +30,17 @@ class BukusTable
                 TextColumn::make('kategori.kategori_buku')
                     ->placeholder('-')
                     ->searchable(),
-                TextColumn::make('stok')
+                TextColumn::make('stok_available')
                     ->label('Tersedia')
                     ->badge()
                     ->color(fn($record) =>
                          $record->stok === 0 ?'danger':
                          ($record->stok <= 5 ? 'warning' : 'success')
-                    )
+                    ),
+                TextColumn::make('stok')
+                    ->label('Stok Total')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
             ])
             ->filters([
                 SelectFilter::make('kategori')

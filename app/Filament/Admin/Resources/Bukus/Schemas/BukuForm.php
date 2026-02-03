@@ -24,6 +24,7 @@ class BukuForm
                     ->preload()
                     ->searchable(),
                 TextInput::make('stok')
+                    ->label('Stok Total')
                     ->required()
                     ->numeric(),
             ]);
