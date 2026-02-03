@@ -29,7 +29,7 @@ class PeminjamanForm
                             ->with('peminjaman')
                             ->get()
                             ->mapWithKeys(function (Buku $buku) {
-                                $stokTersedia = $buku->stok;
+                                $stokTersedia = $buku->stok_available;
                                 $label = $buku->judul;
                                 
                                 if ($stokTersedia <= 0) {
@@ -47,7 +47,7 @@ class PeminjamanForm
                             ->with('peminjaman')
                             ->find($value);
                         
-                        return $buku && $buku->stok <= 0;
+                        return $buku && $buku->stok_available <= 0;
                     }),
 
                 DatePicker::make('tanggal_dipinjam')

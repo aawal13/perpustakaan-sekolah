@@ -48,6 +48,14 @@ class Buku extends Model
         'stok',
     ];
 
+    protected $casts = [
+        'stok_available' => 'integer',
+    ];
+
+    protected $appends = [
+        'stok_available',
+    ];
+
     public function kategori()
     {
         return $this->belongsTo(Kategori::class);

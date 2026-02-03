@@ -51,6 +51,13 @@ class BukuResource extends Resource
         ];
     }
 
+    public static function getEagerLoad(): array
+    {
+        return [
+            'peminjaman',
+        ];
+    }
+
     public static function getPages(): array
     {
         return [
