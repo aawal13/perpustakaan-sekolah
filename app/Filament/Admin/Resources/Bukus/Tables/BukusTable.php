@@ -31,12 +31,8 @@ class BukusTable
                     ->placeholder('-')
                     ->searchable(),
                 TextColumn::make('stok_available')
-                    ->label('Tersedia')
-                    ->badge()
-                    ->color(fn($record) =>
-                         $record->stok === 0 ?'danger':
-                         ($record->stok <= 5 ? 'warning' : 'success')
-                    ),
+                    ->label('Tersedia'),
+                    
                 TextColumn::make('stok')
                     ->label('Stok Total')
                     ->sortable()
