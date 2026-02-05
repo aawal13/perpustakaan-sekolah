@@ -2,25 +2,26 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Admin\Widgets\BukuYgMendekatiPeminjaman;
-use App\Filament\Admin\Widgets\PeminjamanPerbulan;
-use App\Filament\Admin\Widgets\StatsOverview;
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\AuthenticateSession;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Pages\Dashboard;
 use Filament\Support\Colors\Color;
+use App\Filament\Admin\Pages\Login;
 use Filament\Widgets\AccountWidget;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-use Illuminate\Routing\Middleware\SubstituteBindings;
+use Filament\Http\Middleware\Authenticate;
+use App\Filament\Admin\Widgets\StatsOverview;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Filament\Http\Middleware\AuthenticateSession;
+use App\Filament\Admin\Widgets\PeminjamanPerbulan;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use App\Filament\Admin\Widgets\BukuYgMendekatiPeminjaman;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -30,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Perpustakaan Sekolah')
             ->id('admin')
             ->path('/')
-            ->login()
+            ->login(Login::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
