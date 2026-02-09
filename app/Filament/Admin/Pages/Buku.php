@@ -41,7 +41,7 @@ class Buku extends Page implements HasActions, HasSchemas, HasTable
 
                     TextColumn::make('kategori.kategori_buku'),
 
-                    TextColumn::make('stok')
+                    TextColumn::make('stok_available')
                     ->label('Tersedia'),
 
                     TextColumn::make('peminjaman_count')
