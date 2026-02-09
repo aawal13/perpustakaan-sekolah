@@ -53,7 +53,10 @@ class PeminjamanForm
                 DatePicker::make('tanggal_dipinjam')
                     ->default(now())
                     ->native(false)
-                    ->required(),
+                    ->required()
+                    ->closeOnDateSelection()
+                    ->locale('id')
+                    ->displayFormat('d F Y'),
             ]);
     }
 }
