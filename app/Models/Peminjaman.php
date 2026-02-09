@@ -16,6 +16,8 @@ class Peminjaman extends Model
         'siswa_id',
         'tanggal_dipinjam',
         'tanggal_dikembalikan',
+        'status',
+        'denda',
     ];
 
     protected $casts = [
@@ -53,9 +55,11 @@ class Peminjaman extends Model
 
         // Handle stock when creating new peminjaman
         // NOTE: Stock is calculated dynamically by accessor, no need to decrement database
-        static::created(function ($peminjaman) {
+        static::created(function (Peminjaman $peminjaman) {
             // Calculate initial status and fine
-            $peminjaman->calculateStatusDanDenda();
+            $update = $peminjaman->calculateStatusDanDenda();
+            $peminjaman->status = $update[0];
+            $peminjaman->denda = $update[1];
             $peminjaman->save();
         });
 
