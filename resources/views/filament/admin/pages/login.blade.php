@@ -1,19 +1,10 @@
 <x-filament-panels::page.simple>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         .custom-login-page {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #f5af19 0%, #f12711 50%, #ff6b6b 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            margin: -1.5rem;
         }
 
         .login-container {
@@ -237,6 +228,29 @@
 
         .grid {
             gap: 24px !important;
+        }
+
+        /* HAPUS TOTAL WRAPPER / BOX LOGIN BAWAAN FILAMENT */
+        .fi-simple-layout,
+        .fi-simple-page,
+        .fi-simple-main,
+        .fi-simple-container {
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+
+        /* Hilangkan padding & batas lebar bawaan */
+        .fi-simple-main {
+            padding: 0 !important;
+            max-width: none !important;
+        }
+
+        /* Kalau masih ada card putih */
+        .fi-card {
+            background: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
     </style>
 
