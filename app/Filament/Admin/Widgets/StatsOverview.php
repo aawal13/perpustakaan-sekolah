@@ -3,6 +3,8 @@
 namespace App\Filament\Admin\Widgets;
 
 use App\Enums\StatusPeminjaman;
+use App\Filament\Admin\Resources\Bukus\BukuResource;
+use App\Filament\Admin\Resources\Peminjaman\PeminjamanResource;
 use App\Models\Buku;
 use App\Models\Peminjaman;
 use Filament\Facades\Filament;
@@ -32,26 +34,40 @@ class StatsOverview extends StatsOverviewWidget
         }
 
         return [
-    Stat::make('Jumlah Buku', Buku::count()),
+    Stat::make('Jumlah Buku', Buku::count())
+        ->url(BukuResource::getUrl('index')
+        ),
 
     Stat::make(
         'Jumlah Peminjaman',
-        (clone $peminjamanQuery)->count()
-    ),
+        (clone $peminjamanQuery)->count())
+        ->url(
+            PeminjamanResource::getUrl('index',[
+                'activeTab' => 'Semua',
+            ])
+        ),
 
     Stat::make(
         'Status Dipinjam',
         (clone $peminjamanQuery)
             ->where('status', StatusPeminjaman::DIPINJAM)
-            ->count()
-    ),
+            ->count())
+        ->url(
+            PeminjamanResource::getUrl('index',[
+                'activeTab' => 'Dipinjam',
+            ])
+        ),
     
     Stat::make(
         'Status Terlambat',
         (clone $peminjamanQuery)
             ->where('status', StatusPeminjaman::TERLAMBAT)
-            ->count()
-    ),
+            ->count())
+        ->url(
+            PeminjamanResource::getUrl('index',[
+                'activeTab' => 'Terlambat',
+            ])
+        ),
 
     Stat::make(
         'Total Denda',

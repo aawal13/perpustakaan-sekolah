@@ -15,16 +15,23 @@ class ListPeminjaman extends ListRecords
 {
     protected static string $resource = PeminjamanResource::class;
 
+    public ?string $activeTab = null;
+
     public function mount(?string $activeTab = null): void
     {
         parent::mount($activeTab);
 
+        // ambil dari URL
+        $this->activeTab = request()->query('activeTab');
+
+        // jalankan update status & denda
         Peminjaman::whereNull('tanggal_dikembalikan')
             ->orWhere('status', StatusPeminjaman::TERLAMBAT)
             ->get()
             ->each
             ->refreshStatusDanDenda();
     }
+
 
     protected function getHeaderActions(): array
     {
@@ -85,7 +92,10 @@ class ListPeminjaman extends ListRecords
 
             'Dipinjam' => Tab::make()
                 ->badge(fn () => $isSiswa ? $this->getCountByStatus(StatusPeminjaman::DIPINJAM) : Peminjaman::where('status', StatusPeminjaman::DIPINJAM)->count())
-                ->modifyQueryUsing(fn (Builder $query) => $this->filterByUser($query)->where('status', StatusPeminjaman::DIPINJAM)),
+                ->modifyQueryUsing(fn (Builder $query) => $this->filterByUser($query)->where('status', StatusPeminjaman::DIPINJAM))
+                ->query(fn($query)=>
+                    $query->where('status', StatusPeminjaman::DIPINJAM)
+                ),
 
             'Dikembalikan' => Tab::make()
                 ->badge(fn () => $isSiswa ? $this->getCountByStatus(StatusPeminjaman::DIKEMBALIKAN) : Peminjaman::where('status', StatusPeminjaman::DIKEMBALIKAN)->count())
@@ -93,7 +103,10 @@ class ListPeminjaman extends ListRecords
 
             'Terlambat' => Tab::make()
                 ->badge(fn () => $isSiswa ? $this->getCountByStatus(StatusPeminjaman::TERLAMBAT) : Peminjaman::where('status', StatusPeminjaman::TERLAMBAT)->count())
-                ->modifyQueryUsing(fn (Builder $query) => $this->filterByUser($query)->where('status', StatusPeminjaman::TERLAMBAT)),
+                ->modifyQueryUsing(fn (Builder $query) => $this->filterByUser($query)->where('status', StatusPeminjaman::TERLAMBAT))
+                ->query(fn($query)=>
+                    $query->where('status', StatusPeminjaman::TERLAMBAT)
+                ),
         ];
     }
 
