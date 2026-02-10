@@ -15,6 +15,10 @@ class SiswaForm
         return $schema
             ->components([
                 TextInput::make('nis')
+                    ->unique()
+                    ->validationMessages([
+                        'unique' => 'NIS sudah terdaftar.',
+                    ])
                     ->required(),
                 TextInput::make('name')
                     ->required(),
