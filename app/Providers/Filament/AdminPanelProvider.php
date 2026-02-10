@@ -30,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->brandName(fn () => request()->routeIs('filament.admin.auth.*') ? '' : 'Perpustakaan Sekolah')
             ->id('admin')
+            ->registration()
             ->path('/')
             ->login(Login::class)
             ->colors([

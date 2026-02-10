@@ -273,6 +273,13 @@
             <div class="login-body">
                 {{ $this->content }}
 
+                <div class="text-center mt-4">
+                    Belum memiliki akun?
+                    <a href="{{ filament()->getRegistrationUrl() }}" class="text-sm text-primary-600 hover:underline">
+                        Daftar
+                    </a>
+                </div>
+
                 <div class="login-footer">
                     <p>Silakan login dengan akun Anda untuk mengakses sistem</p>
                 </div>
