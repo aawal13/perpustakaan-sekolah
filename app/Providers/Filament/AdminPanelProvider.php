@@ -7,6 +7,7 @@ use Filament\PanelProvider;
 use Filament\Pages\Dashboard;
 use Filament\Support\Colors\Color;
 use App\Filament\Admin\Pages\Login;
+use App\Filament\Admin\Pages\Register;
 use Filament\Widgets\AccountWidget;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Admin\Widgets\StatsOverview;
@@ -30,8 +31,9 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->brandName(fn () => request()->routeIs('filament.admin.auth.*') ? '' : 'Perpustakaan Sekolah')
             ->id('admin')
-            ->registration()
+            ->registration(Register::class)
             ->path('/')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->login(Login::class)
             ->colors([
                 'primary' => Color::Amber,
