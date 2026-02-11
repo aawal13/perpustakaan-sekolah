@@ -6,52 +6,43 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Pages\Dashboard;
 use Filament\Support\Colors\Color;
-use App\Filament\Admin\Pages\Login;
-use App\Filament\Admin\Pages\Register;
 use Filament\Widgets\AccountWidget;
+use Filament\Widgets\FilamentInfoWidget;
 use Filament\Http\Middleware\Authenticate;
-use App\Filament\Admin\Widgets\StatsOverview;
+use App\Filament\LoginSiswa\Pages\LoginSiswa;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Filament\Http\Middleware\AuthenticateSession;
-use App\Filament\Admin\Widgets\PeminjamanPerbulan;
-use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Filament\Admin\Pages\Register as PagesRegister;
 use Filament\Http\Middleware\DisableBladeIconComponents;
-use App\Filament\Admin\Widgets\BukuYgMendekatiPeminjaman;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 
-class AdminPanelProvider extends PanelProvider
+class SiswaPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->brandName(fn () => request()->routeIs('filament.admin.auth.*') ? '' : 'Perpustakaan Sekolah')
-            ->id('admin')
-            ->path('admin')
-            ->viteTheme('resources/css/filament/admin/theme.css')
-            ->login(Login::class)
+            ->id('siswa')
+            ->path('/')
+            ->login(LoginSiswa::class)
+            ->registration(PagesRegister::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
-            ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')
+            ->discoverResources(in: app_path('Filament/Siswa/Resources'), for: 'App\Filament\Siswa\Resources')
+            ->discoverPages(in: app_path('Filament/Siswa/Pages'), for: 'App\Filament\Siswa\Pages')
             ->pages([
                 Dashboard::class,
             ])
+            ->discoverWidgets(in: app_path('Filament/Siswa/Widgets'), for: 'App\Filament\Siswa\Widgets')
             ->widgets([
-                StatsOverview::class,
                 AccountWidget::class,
-                PeminjamanPerbulan::class,
-                BukuYgMendekatiPeminjaman::class,
+                FilamentInfoWidget::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
-
-            ->resourceEditPageRedirect('index')
-            ->resourceCreatePageRedirect('index')
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -63,10 +54,6 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->plugins([
-                FilamentShieldPlugin::make(),
-            ])
-
             ->authMiddleware([
                 Authenticate::class,
             ]);
