@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Filament\Admin\Pages;
+namespace App\Filament\Siswa\Pages;
 
 use Filament\Auth\Pages\Register as BasePage;
 use Filament\Forms\Components\TextInput;
-use Filament\Pages\Page;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Model;
 

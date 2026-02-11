@@ -15,7 +15,7 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Filament\Http\Middleware\AuthenticateSession;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Filament\Admin\Pages\Register as PagesRegister;
+use App\Filament\Siswa\Pages\Register;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -29,7 +29,7 @@ class SiswaPanelProvider extends PanelProvider
             ->id('siswa')
             ->path('/')
             ->login(LoginSiswa::class)
-            ->registration(PagesRegister::class)
+            ->registration(Register::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
