@@ -2,11 +2,14 @@
 
 namespace App\Filament\Siswa\Pages;
 
+use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use Filament\Auth\Pages\Login as BaseLogin;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
-use Filament\Auth\Http\Responses\Contracts\LoginResponse;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\HtmlString;
+use Illuminate\Validation\ValidationException;
 
 class LoginSiswa extends BaseLogin
 {
@@ -14,46 +17,52 @@ class LoginSiswa extends BaseLogin
     {
         return $schema
             ->components([
-                TextInput::make('nis')
+                TextInput::make('no_identitas')
                     ->label('NIS')
-                    ->required(),
-
-                $this->getPasswordFormComponent(),
-            ]);
+                    ->required()
+                    ->exists(table: 'users', column: 'no_identitas')
+                    ->validationMessages([
+                        'exists' => 'NIS belum terdaftar.',
+                    ]),
+                TextInput::make('password')
+                    ->label(__('filament-panels::auth/pages/login.form.password.label'))
+                    ->password()
+                    ->revealable(filament()->arePasswordsRevealable())
+                    ->autocomplete('current-password')
+                    ->required()
+                ]);
     }
 
     protected function getCredentialsFromFormData(array $data): array
     {
         return [
-            'nis' => $data['nis'],
+            'no_identitas' => $data['no_identitas'],
             'password' => $data['password'],
         ];
     }
 
     public function authenticate(): ?LoginResponse
-    {
-        $this->rateLimit(5);
+{
+    $this->rateLimit(5);
 
-        $credentials = $this->getCredentialsFromFormData($this->form->getState());
+    $data = $this->form->getState();
+    $credentials = $this->getCredentialsFromFormData($data);
 
-        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
-            $this->throwFailureException();
-        }
+    if (! Auth::attempt($credentials, false)) {
+    throw ValidationException::withMessages([
+        'password' => 'Password salah.',
+    ]);
+}
 
-        $user = Auth::user();
+    $user = Auth::user();
 
-        // Verifikasi user memiliki role 'Siswa'
-        if (!$user->hasRole('Siswa')) {
-            Auth::logout();
-            $this->throwFailureValidationException(
-                $this->getForm(),
-                ['nis' => 'Akun ini tidak memiliki akses sebagai Siswa.']
-            );
-        }
-
-        $this->sessionRegenerateId();
-
-        return app(LoginResponse::class);
+    if (! $user->hasRole('Siswa')) {
+        Auth::logout();
+        $this->addError('no_identitas', 'Akun ini tidak memiliki akses sebagai Siswa.');
+        return null;
     }
+
+    return app(LoginResponse::class);
+}
 }
 
