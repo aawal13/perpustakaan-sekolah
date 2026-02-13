@@ -7,8 +7,6 @@ use Filament\Auth\Pages\Login as BaseLogin;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 
 class LoginSiswa extends BaseLogin
@@ -43,7 +41,6 @@ class LoginSiswa extends BaseLogin
 
     public function authenticate(): ?LoginResponse
 {
-    $this->rateLimit(5);
 
     $data = $this->form->getState();
     $credentials = $this->getCredentialsFromFormData($data);

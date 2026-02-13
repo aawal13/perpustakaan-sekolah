@@ -56,7 +56,7 @@ class Register extends BasePage
         $data['email'] = $data['name'] . '@gmail.com';
         
         $user = $this->getUserModel()::create($data);
-        
+
         // Assign role 'Siswa' ke user yang baru register
         $siswaRole = Role::where('name', 'Siswa')->first();
         if ($siswaRole) {
