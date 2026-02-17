@@ -31,13 +31,13 @@ class PeminjamanForm
                             ->mapWithKeys(function (Buku $buku) {
                                 $stokTersedia = $buku->stok_available;
                                 $label = $buku->judul;
-                                
+
                                 if ($stokTersedia <= 0) {
                                     $label .= ' (Stok Habis)';
                                 } else {
                                     $label .= " (Tersedia: {$stokTersedia})";
                                 }
-                                
+
                                 return [$buku->id => $label];
                             })
                             ->toArray();
@@ -46,7 +46,7 @@ class PeminjamanForm
                         $buku = Buku::query()
                             ->with('peminjaman')
                             ->find($value);
-                        
+
                         return $buku && $buku->stok_available <= 0;
                     }),
 
@@ -60,4 +60,3 @@ class PeminjamanForm
             ]);
     }
 }
-

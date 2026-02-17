@@ -18,7 +18,7 @@ use UnitEnum;
 
 class SettingsPage extends Page implements HasSchemas
 {
-    use InteractsWithSchemas, HasPageShield;
+    use HasPageShield, InteractsWithSchemas;
 
     protected string $view = 'filament.admin.pages.settings-page';
 

@@ -46,7 +46,7 @@ class Peminjaman extends Model
         // Handle stock updates after save (for status changes)
         static::saved(function ($peminjaman) {
             // Only update stock if status was changed
-            if (!is_null($peminjaman->previousStatus)) {
+            if (! is_null($peminjaman->previousStatus)) {
                 $peminjaman->updateStokBuku();
                 // Reset after processing
                 $peminjaman->previousStatus = null;
@@ -256,4 +256,3 @@ class Peminjaman extends Model
         );
     }
 }
-

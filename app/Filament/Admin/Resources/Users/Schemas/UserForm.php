@@ -2,12 +2,12 @@
 
 namespace App\Filament\Admin\Resources\Users\Schemas;
 
-use Filament\Schemas\Schema;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Hash;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
+use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class UserForm
 {
@@ -37,7 +37,7 @@ class UserForm
                     ->relationship('siswa', 'name')
                     ->searchable()
                     ->preload()
-                    ->visible(fn($get) => Role::find($get('roles'))?->name == 'Siswa'),
+                    ->visible(fn ($get) => Role::find($get('roles'))?->name == 'Siswa'),
             ]);
     }
 }

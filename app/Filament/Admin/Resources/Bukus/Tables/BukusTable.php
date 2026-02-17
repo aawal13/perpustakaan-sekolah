@@ -4,8 +4,8 @@ namespace App\Filament\Admin\Resources\Bukus\Tables;
 
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Facades\Filament;
 use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -32,11 +32,11 @@ class BukusTable
                     ->searchable(),
                 TextColumn::make('stok_available')
                     ->label('Tersedia'),
-                    
+
                 TextColumn::make('stok')
                     ->label('Stok Total')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 SelectFilter::make('kategori')
@@ -48,7 +48,7 @@ class BukusTable
             ])
             ->toolbarActions([
                 DeleteBulkAction::make()
-                    ->visible(fn () => !Filament::auth()->user()->hasRole('Siswa')),
+                    ->visible(fn () => ! Filament::auth()->user()->hasRole('Siswa')),
             ]);
     }
 }

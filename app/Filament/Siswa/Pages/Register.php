@@ -29,19 +29,19 @@ class Register extends BasePage
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),
             ]);
-    }   
+    }
 
     protected function handleRegistration(array $data): Model
     {
         // Validasi NIS harus ada di table siswa
         $siswa = Siswa::where('nis', $data['nis'])->first();
-        
-        if (!$siswa) {
+
+        if (! $siswa) {
             throw ValidationException::withMessages([
                 'nis' => ['NIS tidak ditemukan di data siswa. Silakan hubungi administrator.'],
             ]);
         }
-        
+
         // Validasi user belum terdaftar
         $userExists = User::where('no_identitas', $data['nis'])->exists();
         if ($userExists) {
@@ -49,12 +49,12 @@ class Register extends BasePage
                 'nis' => ['Siswa dengan NIS ini sudah memiliki akun. Silakan login.'],
             ]);
         }
-        
+
         // Set name dari table siswa, dan no_identitas = nis
         $data['name'] = $siswa->name;
         $data['no_identitas'] = $data['nis'];
-        $data['email'] = $data['name'] . '@gmail.com';
-        
+        $data['email'] = $data['name'].'@gmail.com';
+
         $user = $this->getUserModel()::create($data);
 
         // Assign role 'Siswa' ke user yang baru register
@@ -62,8 +62,7 @@ class Register extends BasePage
         if ($siswaRole) {
             $user->assignRole($siswaRole);
         }
-        
+
         return $user;
     }
 }
-

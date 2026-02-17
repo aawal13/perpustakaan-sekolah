@@ -32,7 +32,6 @@ class ListPeminjaman extends ListRecords
             ->refreshStatusDanDenda();
     }
 
-
     protected function getHeaderActions(): array
     {
         return [
@@ -50,7 +49,7 @@ class ListPeminjaman extends ListRecords
 
         $user = Filament::auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             return $query;
         }
 
@@ -93,8 +92,7 @@ class ListPeminjaman extends ListRecords
             'Dipinjam' => Tab::make()
                 ->badge(fn () => $isSiswa ? $this->getCountByStatus(StatusPeminjaman::DIPINJAM) : Peminjaman::where('status', StatusPeminjaman::DIPINJAM)->count())
                 ->modifyQueryUsing(fn (Builder $query) => $this->filterByUser($query)->where('status', StatusPeminjaman::DIPINJAM))
-                ->query(fn($query)=>
-                    $query->where('status', StatusPeminjaman::DIPINJAM)
+                ->query(fn ($query) => $query->where('status', StatusPeminjaman::DIPINJAM)
                 ),
 
             'Dikembalikan' => Tab::make()
@@ -104,8 +102,7 @@ class ListPeminjaman extends ListRecords
             'Terlambat' => Tab::make()
                 ->badge(fn () => $isSiswa ? $this->getCountByStatus(StatusPeminjaman::TERLAMBAT) : Peminjaman::where('status', StatusPeminjaman::TERLAMBAT)->count())
                 ->modifyQueryUsing(fn (Builder $query) => $this->filterByUser($query)->where('status', StatusPeminjaman::TERLAMBAT))
-                ->query(fn($query)=>
-                    $query->where('status', StatusPeminjaman::TERLAMBAT)
+                ->query(fn ($query) => $query->where('status', StatusPeminjaman::TERLAMBAT)
                 ),
         ];
     }
@@ -117,7 +114,7 @@ class ListPeminjaman extends ListRecords
     {
         $user = Filament::auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             return $query;
         }
 

@@ -24,8 +24,8 @@ class BukuInfolist
                             ->placeholder('-'),
                         TextEntry::make('kategori.kategori_buku')
                             ->placeholder('-'),
-                            TextEntry::make('stok_available')
-                                ->label('Stok Tersedia'),
+                        TextEntry::make('stok_available')
+                            ->label('Stok Tersedia'),
                         TextEntry::make('stok')
                             ->label('Total Stok')
                             ->numeric()

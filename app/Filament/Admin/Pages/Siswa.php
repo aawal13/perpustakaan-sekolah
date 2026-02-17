@@ -38,20 +38,20 @@ class Siswa extends Page implements HasActions, HasSchemas, HasTable
             ->defaultSort('peminjaman_count', 'desc')
             ->columns([
                 TextColumn::make('nis')
-                   ->searchable()
-                   ->label('NIS'),
+                    ->searchable()
+                    ->label('NIS'),
                 TextColumn::make('name')
-                   ->searchable()
-                   ->label('Nama'),
+                    ->searchable()
+                    ->label('Nama'),
                 TextColumn::make('kelas')
-                   ->label('Kelas'),
+                    ->label('Kelas'),
                 TextColumn::make('peminjaman_count')
-                   ->label('Jumlah Peminjaman')
-                   ->sortable(),
+                    ->label('Jumlah Peminjaman')
+                    ->sortable(),
                 TextColumn::make('peminjaman_sum_denda')
-                   ->label('Total Denda')
-                   ->sortable()
-                   ->money('IDR', true),
+                    ->label('Total Denda')
+                    ->sortable()
+                    ->money('IDR', true),
             ])
             ->filters([
                 // ..

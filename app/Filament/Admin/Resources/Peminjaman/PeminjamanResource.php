@@ -11,12 +11,12 @@ use App\Filament\Admin\Resources\Peminjaman\Schemas\PeminjamanInfolist;
 use App\Filament\Admin\Resources\Peminjaman\Tables\PeminjamanTable;
 use App\Models\Peminjaman;
 use BackedEnum;
+use Filament\Facades\Filament;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Facades\Filament;
 
 class PeminjamanResource extends Resource
 {
@@ -28,22 +28,20 @@ class PeminjamanResource extends Resource
 
     protected static ?string $slug = 'peminjaman';
 
-
     public static function form(Schema $schema): Schema
     {
         return PeminjamanForm::configure($schema);
     }
-    
+
     public static function infolist(Schema $schema): Schema
     {
         return PeminjamanInfolist::configure($schema);
     }
-    
+
     public static function table(Table $table): Table
     {
         return PeminjamanTable::configure($table);
     }
-
 
     public static function getRelations(): array
     {
@@ -55,7 +53,7 @@ class PeminjamanResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         $query = parent::getEloquentQuery();
-        
+
         /** @var \App\Models\User $user */
         $user = Filament::auth()->user();
 

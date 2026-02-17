@@ -4,6 +4,7 @@ namespace App\Filament\Siswa\Pages;
 
 use Filament\Auth\Http\Responses\Contracts\LoginResponse;
 use Filament\Auth\Pages\Login as BaseLogin;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
@@ -27,8 +28,8 @@ class LoginSiswa extends BaseLogin
                     ->password()
                     ->revealable(filament()->arePasswordsRevealable())
                     ->autocomplete('current-password')
-                    ->required()
-                ]);
+                    ->required(),
+            ]);
     }
 
     protected function getCredentialsFromFormData(array $data): array
@@ -40,26 +41,27 @@ class LoginSiswa extends BaseLogin
     }
 
     public function authenticate(): ?LoginResponse
-{
+    {
 
-    $data = $this->form->getState();
-    $credentials = $this->getCredentialsFromFormData($data);
+        $data = $this->form->getState();
+        $credentials = $this->getCredentialsFromFormData($data);
 
-    if (! Auth::attempt($credentials, false)) {
-    throw ValidationException::withMessages([
-        'password' => 'Password salah.',
-    ]);
-}
+        if (! Auth::attempt($credentials, false)) {
+            throw ValidationException::withMessages([
+                'password' => 'Password salah.',
+            ]);
+        }
 
-    $user = Auth::user();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
-    if (! $user->hasRole('Siswa')) {
-        Auth::logout();
-        $this->addError('no_identitas', 'Akun ini tidak memiliki akses sebagai Siswa.');
-        return null;
+        if (! $user->hasRole('Siswa')) {
+            Auth::logout();
+            $this->addError('no_identitas', 'Akun ini tidak memiliki akses sebagai Siswa.');
+
+            return null;
+        }
+
+        return app(LoginResponse::class);
     }
-
-    return app(LoginResponse::class);
 }
-}
-

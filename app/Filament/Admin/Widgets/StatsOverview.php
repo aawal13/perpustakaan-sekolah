@@ -34,51 +34,51 @@ class StatsOverview extends StatsOverviewWidget
         }
 
         return [
-    Stat::make('Jumlah Buku', Buku::count())
-        ->url(BukuResource::getUrl('index')
-        ),
+            Stat::make('Jumlah Buku', Buku::count())
+                ->url(BukuResource::getUrl('index')
+                ),
 
-    Stat::make(
-        'Jumlah Peminjaman',
-        (clone $peminjamanQuery)->count())
-        ->url(
-            PeminjamanResource::getUrl('index',[
-                'activeTab' => 'Semua',
-            ])
-        ),
+            Stat::make(
+                'Jumlah Peminjaman',
+                (clone $peminjamanQuery)->count())
+                ->url(
+                    PeminjamanResource::getUrl('index', [
+                        'activeTab' => 'Semua',
+                    ])
+                ),
 
-    Stat::make(
-        'Status Dipinjam',
-        (clone $peminjamanQuery)
-            ->where('status', StatusPeminjaman::DIPINJAM)
-            ->count())
-        ->url(
-            PeminjamanResource::getUrl('index',[
-                'activeTab' => 'Dipinjam',
-            ])
-        ),
-    
-    Stat::make(
-        'Status Terlambat',
-        (clone $peminjamanQuery)
-            ->where('status', StatusPeminjaman::TERLAMBAT)
-            ->count())
-        ->url(
-            PeminjamanResource::getUrl('index',[
-                'activeTab' => 'Terlambat',
-            ])
-        ),
+            Stat::make(
+                'Status Dipinjam',
+                (clone $peminjamanQuery)
+                    ->where('status', StatusPeminjaman::DIPINJAM)
+                    ->count())
+                ->url(
+                    PeminjamanResource::getUrl('index', [
+                        'activeTab' => 'Dipinjam',
+                    ])
+                ),
 
-    Stat::make(
-        'Total Denda',
-        'Rp ' . number_format(
-            (clone $peminjamanQuery)->sum('denda'),
-            0,
-            ',',
-            '.'
-        )
-    ),
-];
+            Stat::make(
+                'Status Terlambat',
+                (clone $peminjamanQuery)
+                    ->where('status', StatusPeminjaman::TERLAMBAT)
+                    ->count())
+                ->url(
+                    PeminjamanResource::getUrl('index', [
+                        'activeTab' => 'Terlambat',
+                    ])
+                ),
+
+            Stat::make(
+                'Total Denda',
+                'Rp '.number_format(
+                    (clone $peminjamanQuery)->sum('denda'),
+                    0,
+                    ',',
+                    '.'
+                )
+            ),
+        ];
 
     }
 }

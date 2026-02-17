@@ -71,9 +71,8 @@ class PeminjamanTable
                         ->label('Kembalikan buku')
                         ->color('success')
                         ->icon(Heroicon::ArrowLeftEndOnRectangle)
-                        ->visible(fn ($record) => 
-                            !auth()->user()->hasRole('Siswa') && 
-                            ($record->status === StatusPeminjaman::DIPINJAM || 
+                        ->visible(fn ($record) => ! auth()->user()->hasRole('Siswa') &&
+                            ($record->status === StatusPeminjaman::DIPINJAM ||
                              $record->status === StatusPeminjaman::TERLAMBAT)
                         )
                         ->schema([
@@ -99,10 +98,10 @@ class PeminjamanTable
                         ->action(function (array $data, $record) {
                             // Set tanggal_dikembalikan
                             $record->tanggal_dikembalikan = $data['tanggal_dikembalikan'];
-                            
+
                             // Process pengembalian - will set status to DIKEMBALIKAN and update stock
                             $record->processPengembalian();
-                            
+
                             // Save the record
                             $record->save();
                         })
@@ -112,9 +111,8 @@ class PeminjamanTable
             ])
             ->toolbarActions([
                 DeleteBulkAction::make()
-                    ->visible(fn () => !auth()->user()->hasRole('Siswa'))
+                    ->visible(fn () => ! auth()->user()->hasRole('Siswa')),
             ])
             ->emptyStateHeading('No Peminjaman');
     }
 }
-

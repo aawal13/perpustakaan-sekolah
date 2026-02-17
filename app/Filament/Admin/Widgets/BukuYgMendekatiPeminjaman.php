@@ -2,19 +2,18 @@
 
 namespace App\Filament\Admin\Widgets;
 
-use App\Models\Setting;
 use App\Models\Peminjaman;
-use Filament\Tables\Table;
-use Filament\Widgets\TableWidget;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use App\Models\Setting;
 use Filament\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Filament\Widgets\TableWidget;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BukuYgMendekatiPeminjaman extends TableWidget
 {
-
     public function table(Table $table): Table
     {
         $maksHariPinjam = (int) Setting::get('maks_hari_pinjam');
@@ -23,8 +22,7 @@ class BukuYgMendekatiPeminjaman extends TableWidget
         $user = Auth::user();
         $isSiswa = $user->hasRole('Siswa');
 
-            $heading = "Buku yang Mendekati Batas Peminjaman";
-        
+        $heading = 'Buku yang Mendekati Batas Peminjaman';
 
         if ($maksHariPinjam <= 0) {
             $query = Peminjaman::query()->whereRaw('1=0');
@@ -44,11 +42,11 @@ class BukuYgMendekatiPeminjaman extends TableWidget
         return $table
             ->heading($heading)
             ->paginated()
-            ->query(fn(): Builder => $query)
+            ->query(fn (): Builder => $query)
             ->columns([
                 TextColumn::make('siswa.name')
                     ->searchable()
-                    ->visible(fn () => !auth()->user()->hasRole('Siswa')),
+                    ->visible(fn () => ! auth()->user()->hasRole('Siswa')),
                 TextColumn::make('buku.judul')
                     ->label('Judul')
                     ->searchable(),
@@ -60,7 +58,7 @@ class BukuYgMendekatiPeminjaman extends TableWidget
                         return $record->batas_peminjaman
                             ? $record->batas_peminjaman->format('d M, Y')
                             : '-';
-                        })
+                    }),
             ])
             ->filters([
                 //

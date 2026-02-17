@@ -9,7 +9,7 @@ class Login extends BaseLogin
 {
     protected string $view = 'filament.admin.pages.login';
 
-    public function getHeading(): string | \Illuminate\Contracts\Support\Htmlable | null
+    public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable|null
     {
         return null;
     }
@@ -19,4 +19,3 @@ class Login extends BaseLogin
         return null;
     }
 }
-
