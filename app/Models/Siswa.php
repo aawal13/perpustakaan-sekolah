@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Siswa extends Model
 {
-    protected $table = 'siswa';
 
     protected $fillable = [
         'nis',

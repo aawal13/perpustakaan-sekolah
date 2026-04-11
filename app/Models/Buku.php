@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Buku extends Model
 {
-    protected $table = 'buku';
 
     /**
      * Get the available stock (total stock minus borrowed books)

@@ -19,7 +19,7 @@ class UsersTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('siswa.nis')
-                    ->label('No identitas')
+                    ->label('Nis')
                     ->searchable(),
                 TextColumn::make('email')
                     ->label('Email address')

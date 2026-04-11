@@ -17,7 +17,7 @@ return new class extends Migration
             $table->dropForeign(['buku_id']);
             $table->foreign('buku_id')
                 ->references('id')
-                ->on('buku')
+                ->on('bukus')
                 ->cascadeOnDelete();
         });
     }

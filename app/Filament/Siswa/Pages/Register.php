@@ -20,11 +20,11 @@ class Register extends BasePage
                 TextInput::make('nis')
                     ->label('NIS')
                     ->required()
-                    ->exists(table: 'siswa', column: 'nis')
+                    ->exists(table: 'siswas', column: 'nis')
                     ->unique(table: 'users', column: 'no_identitas')
                     ->validationMessages([
                         'exists' => 'Nis belum terdaftar.',
-                        'unique' => 'NIS ini sudah digunakan.',
+                        'unique' => 'Nis ini sudah digunakan.',
                     ]),
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),

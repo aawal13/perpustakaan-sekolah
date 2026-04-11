@@ -16,7 +16,10 @@ class UserInfolist
                     ->label('No identitas'),
                 TextEntry::make('email')
                     ->label('Email address'),
-                TextEntry::make('roles.name'),
+                TextEntry::make('roles.name')
+                    ->label('Role'),
+                TextEntry::make('password')
+                    ->label('Password'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),

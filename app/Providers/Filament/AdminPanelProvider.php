@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->brandName(fn () => request()->routeIs('filament.admin.auth.*') ? '' : 'Perpustakaan Sekolah')
+            ->default()
             ->id('admin')
             ->path('admin')
             ->viteTheme('resources/css/filament/admin/theme.css')
