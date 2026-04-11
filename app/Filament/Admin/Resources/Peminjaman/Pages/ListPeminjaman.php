@@ -28,8 +28,14 @@ class ListPeminjaman extends ListRecords
         Peminjaman::whereNull('tanggal_dikembalikan')
             ->orWhere('status', StatusPeminjaman::TERLAMBAT)
             ->get()
-            ->each
-            ->refreshStatusDanDenda();
+            ->each(function ($peminjaman) {
+    [$status, $denda] = $peminjaman->calculateStatusDanDenda();
+
+    $peminjaman->update([
+        'status' => $status,
+        'denda' => $denda,
+    ]);
+});
     }
 
     protected function getHeaderActions(): array
