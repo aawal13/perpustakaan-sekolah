@@ -17,6 +17,8 @@ class PeminjamanForm
                     ->relationship('siswa', 'name')
                     ->searchable()
                     ->required()
+                    ->visible(fn () => auth()->user()->hasRole('super_admin'))
+                    ->required(fn () => auth()->user()->hasRole('super_admin'))
                     ->preload(),
 
                 Select::make('buku_id')

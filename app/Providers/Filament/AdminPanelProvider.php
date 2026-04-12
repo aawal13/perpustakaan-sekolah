@@ -28,8 +28,7 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->brandName(fn () => request()->routeIs('filament.admin.auth.*') ? '' : 'Perpustakaan Sekolah')
-            ->default()
+            ->brandName('Perpustakaan Sekolah')
             ->id('admin')
             ->path('admin')
             ->viteTheme('resources/css/filament/admin/theme.css')

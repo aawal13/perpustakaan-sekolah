@@ -11,7 +11,6 @@ class Persetujuan extends Model
         'siswa_id',
         'buku_id',
         'tanggal_dipinjam',
-        'tanggal_dikembalikan',
     ];
 
     public function peminjaman()

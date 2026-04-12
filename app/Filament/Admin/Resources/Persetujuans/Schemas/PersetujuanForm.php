@@ -28,10 +28,6 @@ class PersetujuanForm
                     ->label('Tanggal Dipinjam')
                     ->date()
                     ->required(),
-                DatePicker::make('tanggal_dikembalikan')
-                    ->label('Tanggal Dikembalikan')
-                    ->nullable()
-                    ->date(),
             ]);
     }
 }

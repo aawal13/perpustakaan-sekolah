@@ -7,6 +7,11 @@
             padding: 20px;
         }
 
+        /* HILANGKAN BRAND DI HALAMAN LOGIN */
+        .fi-simple-header {
+            display: none !important;
+        }
+
         .login-container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 24px;

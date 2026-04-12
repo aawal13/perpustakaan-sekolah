@@ -28,6 +28,7 @@ class SiswaPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->brandName('Perpustakaan Sekolah')
             ->id('siswa')
             ->path('/')
             ->login(LoginSiswa::class)
